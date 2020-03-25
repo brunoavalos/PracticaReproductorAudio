@@ -26,6 +26,7 @@ volatile T_UBYTE rub_flagPIT0;
 T_UBYTE lub_counter = 0u;
 T_UBYTE lub_Output = 0u;
 T_UBYTE lub_counterFlag = 0u;
+
 /* Declaración de funciones */
 
 
@@ -66,7 +67,7 @@ void Breath_LED(void)
 	    	}
 	    	else
 	    	{}
-	    	app_PWM_Value(lub_counter);
+//	    	app_PWM_Value(lub_counter);
 
 }
 
@@ -94,7 +95,7 @@ void Counter(void)
 
 /* Función principal */
 
-void main(void)
+int main(void)
 {
 
   	/* Init board hardware. */
@@ -104,21 +105,24 @@ void main(void)
     BOARD_BootClockRUN();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
-    app_PWM_Init(lub_counter);
+    app_PWM_Init();
     while(1)
     {
+    	app_ADC_Task();
     		if(rub_flagPIT0 == 1)
     		    	{
     					Breath_LED();
     					Counter();
+
     					rub_flagPIT0 = 0;
-    		    		PRINTF("\r\nCONTADOR_bandera: %d",lub_Output);
-    		    		PRINTF("\r\nCONTADOR: %d",lub_counter);
+
+
     		    	}
     		else
-    		{/* Nothing else */}
+    		{/* Nothing to do */}
 
     }
+    return 0;
 
 }
 

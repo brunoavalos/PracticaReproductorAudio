@@ -26,15 +26,15 @@
 #define TPM_SOURCE_CLOCK 											CLOCK_GetFreq(kCLOCK_PllFllSelClk)
 
 /* Select ADC */
-#define ADC16_BASE 													ADC0
-#define ADC16_CHANNEL_GROUP 										0U
 #define ADC16_USER_CHANNEL 											0U /*PTE20, ADC0_SE0 */
 #define ADC16_IRQn 													ADC0_IRQn
 #define ADC16_IRQ_HANDLER_FUNC 										ADC0_IRQHandler
+#define APP_ADC_CHANNEL 		0u
+#define APP_ADC_CHANNEL_GROUP 	0u
 
 /* PIT */
 #define PIT_CLK_SRC_HZ_HP 											((uint64_t)24000000)
-#define CLK 														((uint64_t)1000000)
+#define CLK1 														100
 #define OUTPT_OFF 													0x01u
 #define OUTPT_ON 													0x00u
 

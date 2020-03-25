@@ -47,6 +47,8 @@ extern "C" {
  */
 void BOARD_InitBootPeripherals(void);
 
+extern void app_ADC_Task(void);
+extern void app_PWM_Init(void);
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

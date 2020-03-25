@@ -37,7 +37,9 @@ product: Peripherals v1.0
  * @file    peripherals.c
  * @brief   Peripherals initialization file.
  */
- 
+
+
+
 /* This is a template for board specific configuration created by MCUXpresso IDE Project Wizard.*/
 #include <stdio.h>
 #include "peripherals.h"
@@ -55,15 +57,35 @@ product: Peripherals v1.0
  * @brief Set up and initialize all required blocks and functions related to the peripherals hardware.
  */
 
+ /******************************************
+ * Private Variables
+ ******************************************/
+static T_UWORD ruw_ADCValue = 0u;
+static T_UBYTE rub_ConversionInProgressFlag = FALSE;
+static T_UBYTE rub_ADCtoPWM = 0u;
+ /******************************************
+ * Private Prototypes
+ ******************************************/
+static void app_ADC_Trigger(void);
+static T_UBYTE app_ADC_IsConversionCompleted(void);
+static T_UWORD app_ADC_GetValue(void);
 void app_PIT_Init(void);
 void app_ADC_Init(void);
-void app_PWM_Init(T_UBYTE updatedDutycycle);
+void app_PWM_Init(void);
+static void app_ADC_Trigger(void);
 
 void BOARD_InitBootPeripherals(void) {
 	app_PIT_Init();
+	app_ADC_Init();
+	app_ADC_Trigger();
 
 	/* The user initialization should be placed here */
 }
+
+/***********************************************
+ * Function Name: app_PIT_init
+ * Description: TBD
+ ***********************************************/
 
 void app_PIT_Init(void)
 {
@@ -72,49 +94,29 @@ void app_PIT_Init(void)
 	pit_config_t PIT_Config;
     PIT_GetDefaultConfig(&PIT_Config);
     PIT_Init(PIT, &PIT_Config);
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(1000, PIT_CLK_SRC_HZ_HP));
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(CLK1, PIT_CLK_SRC_HZ_HP));
     PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
     PIT_StopTimer(PIT, kPIT_Chnl_0);
     EnableIRQ(PIT_IRQn);
     PIT_StartTimer(PIT, kPIT_Chnl_0);
 }
 
-void app_ADC_Init(void)
-{
-	/* ADC default configuration */
-	adc16_config_t adc16ConfigStruct;
-	adc16_channel_config_t adc16ChannelConfigStruct;
-	ADC16_GetDefaultConfig(&adc16ConfigStruct);
-	ADC16_SetChannelConfig(ADC16_BASE, ADC16_CHANNEL_GROUP, &adc16ChannelConfigStruct);
-	/* Autocalibration */
-	adc16ConfigStruct.referenceVoltageSource = kADC16_ReferenceVoltageSourceValt;
-	ADC16_Init(ADC16_BASE, &adc16ConfigStruct);
-	adc16ChannelConfigStruct.channelNumber = ADC16_USER_CHANNEL;
+/***********************************************
+ * Function Name: app_PWM_init
+ * Description: TBD
+ ***********************************************/
 
-}
-
-T_UWORD app_ADC_Value(void)
-{
-	T_UWORD luw_ADCValue = 0u;
-	luw_ADCValue = ADC16_GetChannelConversionValue(ADC16_BASE, ADC16_CHANNEL_GROUP);
-
-	while (0U == (kADC16_ChannelConversionDoneFlag & ADC16_GetChannelStatusFlags(ADC16_BASE, ADC16_CHANNEL_GROUP)))
-	        {
-	        }
-	return luw_ADCValue;
-}
-
-void app_PWM_Init(T_UBYTE updatedDutycycle)
+void app_PWM_Init(void)
 {
 	/* PWM Default configuration */
 	tpm_config_t tpmInfo;
 
 	tpm_pwm_level_select_t pwmLevel = kTPM_LowTrue;
 	tpm_chnl_pwm_signal_param_t tpmParam;
-		/* Configure tpm params with frequency 24kHZ */
-			tpmParam.chnlNumber = (tpm_chnl_t)BOARD_TPM_CHANNEL;
-			tpmParam.level = kTPM_LowTrue;
-			tpmParam.dutyCyclePercent = updatedDutycycle;
+	/* Configure tpm params with frequency 24kHZ */
+	tpmParam.chnlNumber = (tpm_chnl_t)BOARD_TPM_CHANNEL;
+	tpmParam.level = pwmLevel;
+	tpmParam.dutyCyclePercent = ruw_ADCValue;
 
 
 	/* Select the clock source for the TPM counter as kCLOCK_PllFllSelClk */
@@ -135,9 +137,131 @@ void app_PWM_Init(T_UBYTE updatedDutycycle)
 
 }
 
-void app_PWM_Value(T_UBYTE updatedDutycycle)
+/***********************************************
+ * Function Name: app_PWM_Value
+ * Description: TBD
+ ***********************************************/
+
+void app_PWM_Value(void)
 {
 
 	/* Update PWM duty cycle */
-	TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_TPM_CHANNEL, kTPM_CenterAlignedPwm,updatedDutycycle);
+	TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_TPM_CHANNEL, kTPM_CenterAlignedPwm, ruw_ADCValue);
+}
+
+/***********************************************
+ * Function Name: app_ADC_init
+ * Description: TBD
+ ***********************************************/
+
+void app_ADC_Init(void)
+{
+	adc16_config_t ls_ADCConfig;
+
+	//Initialize structure with default values
+	ADC16_GetDefaultConfig(&ls_ADCConfig);
+
+	//Init ADC Module
+	ADC16_Init(ADC0, &ls_ADCConfig);
+
+	//Disable Hardware Trigger
+	ADC16_EnableHardwareTrigger(ADC0, FALSE); /* Make sure the software trigger is used. */
+
+	//Perform Autocalibration
+	(void)ADC16_DoAutoCalibration(ADC0);
+}
+
+/***********************************************
+ * Function Name: app_ADC_Trigger
+ * Description: TBD
+ ***********************************************/
+
+static void app_ADC_Trigger(void)
+{
+	adc16_channel_config_t ls_ChannelConfig;
+
+	//Channel Selection
+	ls_ChannelConfig.channelNumber = APP_ADC_CHANNEL;
+
+	//Disable Interrupt when Conversion is completed
+	ls_ChannelConfig.enableInterruptOnConversionCompleted = FALSE;
+
+	//Disable Differential Conversion
+	ls_ChannelConfig.enableDifferentialConversion = FALSE;
+
+	ADC16_SetChannelConfig(ADC0, APP_ADC_CHANNEL_GROUP, &ls_ChannelConfig);
+}
+
+/***********************************************
+ * Function Name: app_ADC_IsConversionCompleted
+ * Description: TBD
+ ***********************************************/
+
+static T_UBYTE app_ADC_IsConversionCompleted(void)
+{
+	T_UBYTE lub_Return;
+
+	lub_Return = FALSE;
+
+	//Check if Conversion was completed
+	if(kADC16_ChannelConversionDoneFlag &
+			ADC16_GetChannelStatusFlags(ADC0, APP_ADC_CHANNEL_GROUP))
+	{
+		//Conversion Completed
+		lub_Return = TRUE;
+	}
+	else
+	{
+		//Conversion not completed
+		lub_Return = FALSE;
+	}
+
+	return lub_Return;
+}
+
+/***********************************************
+ * Function Name: app_ADC_GetValue
+ * Description: TBD
+ ***********************************************/
+static T_UWORD app_ADC_GetValue(void)
+{
+	//Return Last Conversion Value
+	return ADC16_GetChannelConversionValue(ADC0, APP_ADC_CHANNEL_GROUP);
+}
+
+/***********************************************
+ * Function Name: app_ADC_Task
+ * Description: TBD
+ ***********************************************/
+
+void app_ADC_Task(void)
+{
+	//Check if a conversion is in progress
+	if(TRUE == rub_ConversionInProgressFlag)
+	{
+		//Check if Conversion was completed
+		if(TRUE == app_ADC_IsConversionCompleted())
+		{
+			//Store the ADC Value
+			ruw_ADCValue = app_ADC_GetValue();
+//			rub_ADCtoPWM = ruw_ADCValue/409;
+			//Send de ADC Value to PWM
+			app_PWM_Value();
+
+			//Clear conversion in progress flag
+			rub_ConversionInProgressFlag = FALSE;
+		}
+		else
+		{
+			/* Do nothing */
+		}
+	}
+	else
+	{
+		//Trigger the ADC Conversion
+		app_ADC_Trigger();
+
+		//Set Conversion in progress flag
+		rub_ConversionInProgressFlag = TRUE;
+	}
 }
