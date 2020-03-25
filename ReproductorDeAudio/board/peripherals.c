@@ -94,7 +94,7 @@ void app_PIT_Init(void)
 	pit_config_t PIT_Config;
     PIT_GetDefaultConfig(&PIT_Config);
     PIT_Init(PIT, &PIT_Config);
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(CLK1, PIT_CLK_SRC_HZ_HP));
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(CLK_500ms, PIT_CLK_SRC_HZ_HP));
     PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
     PIT_StopTimer(PIT, kPIT_Chnl_0);
     EnableIRQ(PIT_IRQn);

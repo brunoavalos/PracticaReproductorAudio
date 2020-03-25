@@ -71,7 +71,7 @@ void Breath_LED(void)
 
 }
 
-void Counter(void)
+void Counter_Foward(void)
 {
 
 	GPIOB->PDOR=lub_Output;
@@ -92,7 +92,70 @@ void Counter(void)
 	   }
 	}
 }
+void Counter_Backward(void)
+{
+	GPIOB->PDOR=lub_Output;
+		if(lub_Output == 0)
+		{
+		   lub_Output = 8;
 
+		}
+		else
+		{
+		   if(lub_Output == 2)
+		   {
+			   lub_Output = 1;
+		   }
+		   else
+		   {
+		   lub_Output = lub_Output >> 1;
+		   }
+		}
+}
+//
+//typedef enum
+//{
+//	Foward,
+//	Backward,
+//	Stop
+//}FSM;
+//
+//FSM Estado = Stop;
+//
+//void Song_Counter(void)
+//{
+//	T_UBYTE lub_CouterSelection=0u;
+//	switch(Estado)
+//	{
+//		case Foward:
+//		{
+//			if(Next == TRUE)
+//			{
+//
+//			}
+//			else
+//			{
+//				Estado = Stop;
+//			}
+//
+//		}default:
+//		{
+//			Estado = Stop;
+//		}
+//		case Backward:
+//		{
+//
+//		}
+//		case Stop:
+//		{
+//			if(Play == TRUE)
+//			{
+//				GPIOB->PDOR=0x15;
+//			}
+//
+//		}
+//	}
+//}
 /* Función principal */
 
 int main(void)
@@ -112,12 +175,13 @@ int main(void)
     		if(rub_flagPIT0 == 1)
     		    	{
     					Breath_LED();
-    					Counter();
-
+//    					Counter_Foward();
+    					Counter_Backward();
     					rub_flagPIT0 = 0;
 
 
     		    	}
+
     		else
     		{/* Nothing to do */}
 
