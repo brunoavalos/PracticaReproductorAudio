@@ -45,7 +45,7 @@ int main(void)
     app_PWM_Init();
     while(1)
     {
-		if(rub_flagPIT1 == TRUE)
+		if((rub_flagPIT1) == TRUE && (rub_flagPIT0 == FALSE))
 		{
 			app_RotabitCounterFoward();
 			rub_flagPIT1 = FALSE;
