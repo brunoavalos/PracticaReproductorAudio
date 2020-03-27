@@ -49,9 +49,10 @@ extern "C" {
 void BOARD_InitBootPeripherals(void);
 
 
-extern unsigned short app_ADC_Task(void);
-static unsigned char app_PWMProcentValue(unsigned short ruw_ADCValue);
+extern void app_ADC_Task(void);
+unsigned char app_PWMProcentValue(void);
 extern void app_PWM_Init(void);
+extern void app_PWM_Value(void);
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

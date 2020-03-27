@@ -44,7 +44,7 @@ int main(void)
     app_PWM_Init();
     while(1)
     {
-    	app_ADC_Task();
+
     		if(rub_flagPIT0 == 1)
     		    	{
 //    					app_RotabitCounterForward();
@@ -52,7 +52,11 @@ int main(void)
 						rub_flagPIT0 = 0;
     		    	}
     		else
-    		{/* Nothing to do */}
+    		{
+    		app_ADC_Task();
+    		app_PWMProcentValue();
+        	app_PWM_Value();
+    		}
 
 
     }

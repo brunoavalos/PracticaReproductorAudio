@@ -62,6 +62,8 @@ product: Peripherals v1.0
  ******************************************/
 
 static T_UBYTE rub_ConversionInProgressFlag = FALSE;
+T_UWORD ruw_ADCValue = 0u;
+T_UBYTE lub_PWMPorcentValue = 0;
 
  /******************************************
  * Private Prototypes
@@ -73,7 +75,7 @@ void app_PIT_Init(void);
 void app_ADC_Init(void);
 void app_PWM_Init(void);
 static void app_ADC_Trigger(void);
-static T_UBYTE app_PWMProcentValue(T_UWORD ruw_ADCValue);
+T_UBYTE app_PWMProcentValue(void);
 
 void BOARD_InitBootPeripherals(void) {
 	app_PIT_Init();
@@ -143,11 +145,11 @@ void app_PWM_Init(void)
  * Description: TBD
  ***********************************************/
 
-void app_PWM_Value(T_UBYTE app_PWMProcentValue())
+void app_PWM_Value(void)
 {
 
 	/* Update PWM duty cycle */
-	TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_TPM_CHANNEL, kTPM_CenterAlignedPwm, app_PWMProcentValue());
+	TPM_UpdatePwmDutycycle(BOARD_TPM_BASEADDR, (tpm_chnl_t)BOARD_TPM_CHANNEL, kTPM_CenterAlignedPwm, lub_PWMPorcentValue);
 }
 
 /***********************************************
@@ -238,43 +240,43 @@ static T_UWORD app_ADC_GetValue(void)
  * uno de los pasos
  ***********************************************/
 
-static T_UBYTE app_PWMProcentValue(T_UWORD ruw_ADCValue)
+T_UBYTE app_PWMProcentValue(void)
 {
-		T_UBYTE lub_PWMPorcentValue;
+
 
 		if(ruw_ADCValue <= 410)
 		{
 			lub_PWMPorcentValue = 0u;
 		}
-		else if ((ruw_ADCValue > 410) && (ruw_ADCValue < 820))
+		else if((ruw_ADCValue > 410) && (ruw_ADCValue < 820))
 		{
 			lub_PWMPorcentValue = 10u;
 		}
-		else if ((ruw_ADCValue > 820) && (ruw_ADCValue < 1230))
+		else if((ruw_ADCValue > 820) && (ruw_ADCValue < 1230))
 		{
 			lub_PWMPorcentValue = 20u;
 		}
-		else if ((ruw_ADCValue > 1230) && (ruw_ADCValue < 1640))
+		else if((ruw_ADCValue > 1230) && (ruw_ADCValue < 1640))
 		{
 			lub_PWMPorcentValue = 30u;
 		}
-		else if ((ruw_ADCValue > 1640) && (ruw_ADCValue < 2050))
+		else if((ruw_ADCValue > 1640) && (ruw_ADCValue < 2050))
 		{
 			lub_PWMPorcentValue = 40u;
 		}
-		else if ((ruw_ADCValue > 2050) && (ruw_ADCValue < 2460))
+		else if((ruw_ADCValue > 2050) && (ruw_ADCValue < 2460))
 		{
 			lub_PWMPorcentValue = 50u;
 		}
-		else if ((ruw_ADCValue > 2460) && (ruw_ADCValue < 2870))
+		else if((ruw_ADCValue > 2460) && (ruw_ADCValue < 2870))
 		{
 			lub_PWMPorcentValue = 60u;
 		}
-		else if ((ruw_ADCValue > 2870) && (ruw_ADCValue < 3280))
+		else if((ruw_ADCValue > 2870) && (ruw_ADCValue < 3280))
 		{
 			lub_PWMPorcentValue = 70u;
 		}
-		else if ((ruw_ADCValue > 3280) && (ruw_ADCValue < 3690))
+		else if((ruw_ADCValue > 3280) && (ruw_ADCValue < 3690))
 		{
 			lub_PWMPorcentValue = 80u;
 		}
@@ -286,7 +288,6 @@ static T_UBYTE app_PWMProcentValue(T_UWORD ruw_ADCValue)
 		{
 			lub_PWMPorcentValue = 100u;
 		}
-
 		return lub_PWMPorcentValue;
 }
 
@@ -295,9 +296,9 @@ static T_UBYTE app_PWMProcentValue(T_UWORD ruw_ADCValue)
  * Description: TBD
  ***********************************************/
 
-T_UWORD app_ADC_Task(void)
+void app_ADC_Task(void)
 {
-	T_UWORD ruw_ADCValue;
+
 	//Check if a conversion is in progress
 	if(TRUE == rub_ConversionInProgressFlag)
 	{
@@ -307,7 +308,6 @@ T_UWORD app_ADC_Task(void)
 			//Store the ADC Value
 			ruw_ADCValue = app_ADC_GetValue();
 
-			return ruw_ADCValue;
 			//Clear conversion in progress flag
 			rub_ConversionInProgressFlag = FALSE;
 		}
