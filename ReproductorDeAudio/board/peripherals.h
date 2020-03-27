@@ -42,13 +42,15 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
 /**
  * @brief 	Initialize peripherals specific settings.
  */
 void BOARD_InitBootPeripherals(void);
 
 
-extern void app_ADC_Task(void);
+extern unsigned short app_ADC_Task(void);
+static unsigned char app_PWMProcentValue(unsigned short ruw_ADCValue);
 extern void app_PWM_Init(void);
 #if defined(__cplusplus)
 }
