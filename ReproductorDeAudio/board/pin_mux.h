@@ -49,40 +49,24 @@ typedef enum _pin_mux_direction
  * @{
  */
 
-
-
-
-/*! @name PORTB0 (number 43), J10[2]/A0
+/*! @name PORTE0
   @{ */
-#define BOARD_INITPINS_BIT0_FGPIO FGPIOB /*!<@brief FGPIO device name: FGPIOB */
-#define BOARD_INITPINS_BIT0_GPIO GPIOB /*!<@brief GPIO device name: GPIOB */
-#define BOARD_INITPINS_BIT0_PORT PORTB /*!<@brief PORT device name: PORTB */
-#define BOARD_INITPINS_BIT0_PIN 0U     /*!<@brief PORTB pin index: 0 */
-                                       /* @} */
+#define BOARD_INITPINS_FGPIOD 		FGPIOD /*!<@brief FGPIO device name: FGPIOE */
+#define BOARD_INITPINS_GPIOD 		GPIOD /*!<@brief GPIO device name: GPIOE */
+#define BOARD_INITPINS_PORTD 		PORTD /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_INPUT0_PIN 	0U     /*!<@brief PORTB pin index: 0 */
+#define BOARD_INITPINS_INPUT1_PIN 	1U
+#define BOARD_INITPINS_INPUT2_PIN 	2U /* @} */
 
-/*! @name PORTB1 (number 44), J10[4]/A1
-  @{ */
-#define BOARD_INITPINS_BIT1_FGPIO FGPIOB /*!<@brief FGPIO device name: FGPIOB */
-#define BOARD_INITPINS_BIT1_GPIO GPIOB /*!<@brief GPIO device name: GPIOB */
-#define BOARD_INITPINS_BIT1_PORT PORTB /*!<@brief PORT device name: PORTB */
-#define BOARD_INITPINS_BIT1_PIN 1U     /*!<@brief PORTB pin index: 1 */
-                                       /* @} */
+/*! @name PORTB (number 43), J10[2]/A0 */
+#define BOARD_INITPINS_FGPIOB 		FGPIOB /*!<@brief FGPIO device name: FGPIOB */
+#define BOARD_INITPINS_GPIOB 		GPIOB  /*!<@brief GPIO device name: GPIOB */
+#define BOARD_INITPINS_PORTB 		PORTB  /*!<@brief PORT device name: PORTB */
+#define BOARD_INITPINS_BIT0_PIN 	0U     /*!<@brief PORTB pin index: 0 */
+#define BOARD_INITPINS_BIT1_PIN 	1U                                       /* @} */
+#define BOARD_INITPINS_BIT2_PIN 	2U
+#define BOARD_INITPINS_BIT3_PIN 	3U
 
-/*! @name PORTB2 (number 45), J10[6]/A2
-  @{ */
-#define BOARD_INITPINS_BIT2_FGPIO FGPIOB /*!<@brief FGPIO device name: FGPIOB */
-#define BOARD_INITPINS_BIT2_GPIO GPIOB /*!<@brief GPIO device name: GPIOB */
-#define BOARD_INITPINS_BIT2_PORT PORTB /*!<@brief PORT device name: PORTB */
-#define BOARD_INITPINS_BIT2_PIN 2U     /*!<@brief PORTB pin index: 2 */
-                                       /* @} */
-
-/*! @name PORTB3 (number 46), J10[8]/A3
-  @{ */
-#define BOARD_INITPINS_BIT3_FGPIO FGPIOB /*!<@brief FGPIO device name: FGPIOB */
-#define BOARD_INITPINS_BIT3_GPIO GPIOB /*!<@brief GPIO device name: GPIOB */
-#define BOARD_INITPINS_BIT3_PORT PORTB /*!<@brief PORT device name: PORTB */
-#define BOARD_INITPINS_BIT3_PIN 3U     /*!<@brief PORTB pin index: 3 */
-                                       /* @} */
 /*******************************************************************************
  * API
  ******************************************************************************/

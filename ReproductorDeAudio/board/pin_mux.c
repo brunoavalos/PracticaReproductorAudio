@@ -51,6 +51,12 @@ PinsProfile:
 #define PIN20_IDX                       20u
 #define PORT_LED_GREEN 				  PORTB
 #define PIN_LED_GREEN 					19U
+
+/* Define GPIO Input Buttons */
+#define INPUT_PORT					  GPIOD
+#define INPUT_BUTTON1					 0u
+#define INPUT_BUTTIN2					 1u
+#define INPUT_BUTTON3					 2u
 /*
  * TEXT BELOW IS USED AS SETTING FOR THE PINS TOOL *****************************
 BOARD_InitPins:
@@ -78,55 +84,84 @@ void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_PortB);
   /* Port E Clock Gate Control: Clock enabled */
   CLOCK_EnableClock(kCLOCK_PortE);
+  /* Port D Clock Gate Control: Clock enabled */
+  CLOCK_EnableClock(kCLOCK_PortD);
   /* PORTB19 (pin 54) is configured as TPM2_CH1 */
 
   PORT_SetPinMux(PORT_LED_GREEN, PIN_LED_GREEN, kPORT_MuxAlt3);
-  gpio_pin_config_t BIT0_config = {
+
+  	  gpio_pin_config_t BIT0_config = {
          .pinDirection = kGPIO_DigitalOutput,
          .outputLogic = 0U
      };
      /* Initialize GPIO functionality on pin PTB0 (pin 43)  */
-     GPIO_PinInit(BOARD_INITPINS_BIT0_GPIO, BOARD_INITPINS_BIT0_PIN, &BIT0_config);
+     GPIO_PinInit(BOARD_INITPINS_GPIOB, BOARD_INITPINS_BIT0_PIN, &BIT0_config);
 
      gpio_pin_config_t BIT1_config = {
          .pinDirection = kGPIO_DigitalOutput,
          .outputLogic = 0U
      };
      /* Initialize GPIO functionality on pin PTB1 (pin 44)  */
-     GPIO_PinInit(BOARD_INITPINS_BIT1_GPIO, BOARD_INITPINS_BIT1_PIN, &BIT1_config);
+     GPIO_PinInit(BOARD_INITPINS_GPIOB, BOARD_INITPINS_BIT1_PIN, &BIT1_config);
 
      gpio_pin_config_t BIT2_config = {
          .pinDirection = kGPIO_DigitalOutput,
          .outputLogic = 0U
      };
      /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
-     GPIO_PinInit(BOARD_INITPINS_BIT2_GPIO, BOARD_INITPINS_BIT2_PIN, &BIT2_config);
+     GPIO_PinInit(BOARD_INITPINS_GPIOB, BOARD_INITPINS_BIT2_PIN, &BIT2_config);
 
      gpio_pin_config_t BIT3_config = {
          .pinDirection = kGPIO_DigitalOutput,
          .outputLogic = 0U
      };
+     /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
+     GPIO_PinInit(BOARD_INITPINS_GPIOB, BOARD_INITPINS_BIT3_PIN, &BIT3_config);
 
-     /* Initialize GPIO functionality on pin PTB3 (pin 46)  */
-          GPIO_PinInit(BOARD_INITPINS_BIT3_GPIO, BOARD_INITPINS_BIT3_PIN, &BIT3_config);
 
-          gpio_pin_config_t BIT4_config = {
-              .pinDirection = kGPIO_DigitalOutput,
-              .outputLogic = 0U
+     gpio_pin_config_t BUTTON1_config = {
+         .pinDirection = kGPIO_DigitalInput
+     };
+
+     /* Initialize GPIO functionality on pin PTD0 (pin 45)  */
+     GPIO_PinInit(INPUT_PORT, BOARD_INITPINS_INPUT0_PIN, &BUTTON1_config);
+
+     gpio_pin_config_t BUTTON2_config = {
+               .pinDirection = kGPIO_DigitalInput
+           };
+
+     /* Initialize GPIO functionality on pin PTD1 ()  */
+     GPIO_PinInit(INPUT_PORT, BOARD_INITPINS_INPUT1_PIN, &BUTTON2_config);
+
+     gpio_pin_config_t BUTTON3_config = {
+               .pinDirection = kGPIO_DigitalInput
           };
 
+     /* Initialize GPIO functionality on pin PTD3 ()  */
+     GPIO_PinInit(INPUT_PORT, BOARD_INITPINS_INPUT2_PIN, &BUTTON3_config);
+
+
+
+     /* PORTE0 () is configured as PTD0 */
+     PORT_SetPinMux(BOARD_INITPINS_PORTD, BOARD_INITPINS_INPUT0_PIN, kPORT_MuxAsGpio);
+
+     /* PORTE0 () is configured as PTD1 */
+     PORT_SetPinMux(BOARD_INITPINS_PORTD, BOARD_INITPINS_INPUT1_PIN, kPORT_MuxAsGpio);
+
+     /* PORTE0 () is configured as PTD2 */
+     PORT_SetPinMux(BOARD_INITPINS_PORTD, BOARD_INITPINS_INPUT2_PIN, kPORT_MuxAsGpio);
 
      /* PORTB0 (pin 43) is configured as PTB0 */
-     PORT_SetPinMux(BOARD_INITPINS_BIT0_PORT, BOARD_INITPINS_BIT0_PIN, kPORT_MuxAsGpio);
+     PORT_SetPinMux(BOARD_INITPINS_PORTB, BOARD_INITPINS_BIT0_PIN, kPORT_MuxAsGpio);
 
      /* PORTB1 (pin 44) is configured as PTB1 */
-     PORT_SetPinMux(BOARD_INITPINS_BIT1_PORT, BOARD_INITPINS_BIT1_PIN, kPORT_MuxAsGpio);
+     PORT_SetPinMux(BOARD_INITPINS_PORTB, BOARD_INITPINS_BIT1_PIN, kPORT_MuxAsGpio);
 
      /* PORTB2 (pin 45) is configured as PTB2 */
-     PORT_SetPinMux(BOARD_INITPINS_BIT2_PORT, BOARD_INITPINS_BIT2_PIN, kPORT_MuxAsGpio);
+     PORT_SetPinMux(BOARD_INITPINS_PORTB, BOARD_INITPINS_BIT2_PIN, kPORT_MuxAsGpio);
 
      /* PORTB3 (pin 46) is configured as PTB3 */
-     PORT_SetPinMux(BOARD_INITPINS_BIT3_PORT, BOARD_INITPINS_BIT3_PIN, kPORT_MuxAsGpio);
+     PORT_SetPinMux(BOARD_INITPINS_PORTB, BOARD_INITPINS_BIT3_PIN, kPORT_MuxAsGpio);
 
   /* PORTE20 (pin 13) is configured as ADC0_DP0 */
   PORT_SetPinMux(PORTE, PIN20_IDX, kPORT_PinDisabledOrAnalog);

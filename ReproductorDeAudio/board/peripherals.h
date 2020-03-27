@@ -32,7 +32,7 @@
  * @file    peripherals.h
  * @brief   Peripherals initialization header file.
  */
- 
+
 /* This is a template for board specific configuration created by MCUXpresso IDE Project Wizard.*/
 
 #ifndef _PERIPHERALS_H_
@@ -46,6 +46,7 @@ extern "C" {
  * @brief 	Initialize peripherals specific settings.
  */
 void BOARD_InitBootPeripherals(void);
+
 
 extern void app_ADC_Task(void);
 extern void app_PWM_Init(void);
