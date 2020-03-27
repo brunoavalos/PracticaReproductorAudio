@@ -20,6 +20,8 @@
 #include "typedef_macros.h"
 #include "Macros.h"
 
+
+
 /* Variables Globales */
 
 volatile T_UBYTE rub_flagPIT0;
@@ -112,51 +114,7 @@ void Counter_Backward(void)
 		   }
 		}
 }
-//
-//typedef enum
-//{
-//	Foward,
-//	Backward,
-//	Stop
-//}FSM;
-//
-//FSM Estado = Stop;
-//
-//void Song_Counter(void)
-//{
-//	T_UBYTE lub_CouterSelection=0u;
-//	switch(Estado)
-//	{
-//		case Foward:
-//		{
-//			if(Next == TRUE)
-//			{
-//
-//			}
-//			else
-//			{
-//				Estado = Stop;
-//			}
-//
-//		}default:
-//		{
-//			Estado = Stop;
-//		}
-//		case Backward:
-//		{
-//
-//		}
-//		case Stop:
-//		{
-//			if(Play == TRUE)
-//			{
-//				GPIOB->PDOR=0x15;
-//			}
-//
-//		}
-//	}
-//}
-/* Función principal */
+
 
 int main(void)
 {
@@ -181,9 +139,9 @@ int main(void)
 
 
     		    	}
-
     		else
     		{/* Nothing to do */}
+
 
     }
     return 0;

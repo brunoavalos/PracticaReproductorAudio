@@ -53,3 +53,5 @@ dkms.conf
 /.metadata/
 
 .mcuxpressoide_packages_support/
+
+FreeRTOS_TAD_logs/
