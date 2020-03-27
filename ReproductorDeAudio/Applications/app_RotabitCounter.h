@@ -12,7 +12,6 @@
 #include "typedef_macros.h"
 
 
-
 extern void app_RotabitCounterFoward(void);
 extern void app_RotabitCounterBackward(void);
 

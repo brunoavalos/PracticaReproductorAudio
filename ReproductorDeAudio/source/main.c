@@ -20,11 +20,12 @@
 #include "typedef_macros.h"
 #include "Macros.h"
 #include "Applications/app_RotabitCounter.h"
-
+#include "Applications/app_Debounce.h"
+#include "Applications/app_ReadInput.h"
+#include "Applications/app_PITFlag.h"
 
 /* Variables Globales */
 
-volatile T_UBYTE rub_flagPIT0;
 
 T_UBYTE lub_counterFlag = 0u;
 
@@ -44,34 +45,20 @@ int main(void)
     app_PWM_Init();
     while(1)
     {
-
-    		if(rub_flagPIT0 == 1)
-    		    	{
-//    					app_RotabitCounterForward();
-    					app_RotabitCounterBackward();
-						rub_flagPIT0 = 0;
-    		    	}
-    		else
-    		{
+		if(rub_flagPIT1 == TRUE)
+		{
+			app_RotabitCounterFoward();
+			rub_flagPIT1 = FALSE;
+		}
+    		app_ReadInputValue();
+    		app_Debounce_TaskMngr();
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
-    		}
-
 
     }
     return 0;
 
 }
 
-void PIT_DriverIRQHandler(void)
-{
-	rub_flagPIT0 = PIT_GetStatusFlags(PIT, kPIT_Chnl_0);
 
-	if(rub_flagPIT0)
-	{
-		PIT_ClearStatusFlags(PIT, 0, kPIT_TimerFlag);
-	}
-	else
-	{ /* Nothing else */}
-}

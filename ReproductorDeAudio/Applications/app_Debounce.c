@@ -5,8 +5,9 @@
  *      Author: dario
  */
 
-#include "typedef_macros.h"
 #include "app_Debounce.h"
+#include "app_ReadInput.h"
+#include "app_PITFlag.h"
 
 /******************************************
  * Prototypes
@@ -15,13 +16,13 @@ static void app_Debounce_CheckButtonsState(void);
 static void app_Debounce_IncreaseDbncCounter(T_UBYTE lub_ButtonNumber);
 static void app_Debounce_ClearDbncCounter(T_UBYTE lub_ButtonNumber);
 static void app_Debounce_Actions();
+
 /******************************************
  * Variables
  ******************************************/
-
 T_BUTTON_STATES rae_ButtonsState[NUMBERS_BUTTON];
 T_UWORD	raub_ButtonDebounceCounters[NUMBERS_BUTTON];
-extern T_UBYTE lub_ButtonInputState[NUMBERS_BUTTON];
+
 
 /******************************************
  * Code
@@ -65,7 +66,7 @@ void app_Debounce_CheckButtonsState(void)
 	/* Check the buttons state */
 	for(lub_i = 0; lub_i < NUMBERS_BUTTON;lub_i++)
 	{//Check for each button
-		if(lub_ButtonInputState[lub_i] == FALSE)
+		if(lub_ButtonState[lub_i] == FALSE)
 		{//Button pressed in HW
 			app_Debounce_IncreaseDbncCounter(lub_i);
 		}
@@ -124,12 +125,22 @@ static void app_Debounce_Actions()
 			/*Actions for BUTTON 0*/
 			case BUTTON0:
 			{
-
+				if(rub_flagPIT0 == TRUE)
+				{
+					app_RotabitCounterBackward();
+					PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
+					rub_flagPIT0 = FALSE;
+				}
 			}break;
 			/*Actions for BUTTON 1*/
 			case BUTTON1:
 			{
-
+				if(rub_flagPIT0 == TRUE)
+				{
+					app_RotabitCounterFoward();
+					PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
+					rub_flagPIT0 = FALSE;
+				}
 			}break;
 			/*Actions for not valid BUTTON*/
 			default:

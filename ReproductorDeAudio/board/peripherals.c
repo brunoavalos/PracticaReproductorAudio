@@ -94,14 +94,23 @@ void app_PIT_Init(void)
 {
 
 	/* Inicialización del PIT */
+	/* Declaracion del primer canal PIT*/
 	pit_config_t PIT_Config;
     PIT_GetDefaultConfig(&PIT_Config);
     PIT_Init(PIT, &PIT_Config);
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(CLK_500ms, PIT_CLK_SRC_HZ_HP));
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(CLK_100ms, PIT_CLK_SRC_HZ_HP));
     PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
     PIT_StopTimer(PIT, kPIT_Chnl_0);
     EnableIRQ(PIT_IRQn);
     PIT_StartTimer(PIT, kPIT_Chnl_0);
+
+    /* Declaracion del segundo canal PIT*/
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, MSEC_TO_COUNT(CLK_500ms, PIT_CLK_SRC_HZ_HP));
+    PIT_EnableInterrupts(PIT, kPIT_Chnl_1, kPIT_TimerInterruptEnable);
+    PIT_StopTimer(PIT, kPIT_Chnl_1);
+    EnableIRQ(PIT_IRQn);
+    PIT_StartTimer(PIT, kPIT_Chnl_1);
+
 }
 
 /***********************************************

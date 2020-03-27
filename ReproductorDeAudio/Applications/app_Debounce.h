@@ -6,7 +6,9 @@
  */
 
 
-#include "typedef_macros.h"
+#include "../source/typedef_macros.h"
+#include "app_RotabitCounter.h"
+
 
 #ifndef APP_DEBOUNCE_H_
 #define APP_DEBOUNCE_H_
@@ -15,8 +17,9 @@
  * Macros
  ******************************************/
 
-#define NUMBERS_BUTTON 					((T_UBYTE)3)
+#define NUMBERS_BUTTON 					((T_UBYTE)2)
 #define APP_BTNDBNC_DBNC_VALID_COUNT	((T_UWORD)3000U)
+
 
 /******************************************
  * Prototypes
@@ -41,5 +44,8 @@ enum
 	BUTTON1,
 	N_BUTTONS
 };
+
+
+
 
 #endif /* APP_DEBOUNCE_H_ */
