@@ -11,13 +11,14 @@
 
 /* Valor de los botones */
 
-extern T_UBYTE lub_ButtonState[2];
+extern T_UBYTE lub_ButtonState[2]; /* 0 1 2 Guarda los estado logicos de los botones*/
 T_UBYTE lub_i = 0u;
 T_UBYTE rub_Back_Btn_Flag = 0u;
 T_UBYTE rub_Next_Btn_Flag = 0u;
 
 T_UBYTE TimeState = 0u;
-T_UBYTE rub_flag_X = 0u;
+T_UBYTE rub_NormalPressFlag = 0u;
+T_UBYTE rub_LongPressFlag = 0u;
 
 typedef enum{
 	LongPress, /*0 */
@@ -39,16 +40,29 @@ T_ButtonState BtnState = Btn_Unpressed;
 
 void app_NewButtonInputValue(void)
 {
-	if(TimeState >= 50u && TimeState <= 1000u)
+	for(lub_o = 0u; o <= NUMBERS_BUTTON; lub_o++)
+	{
+		if(lub_ButtonState[lub_o] == FALSE)
 		{
-			rub_flag_X = TRUE;
+			if(TimeState >= 50u && TimeState <= 1000u)
+			{
+				rub_NormalPressFlag = TRUE;
+			}
+		else if(TimeState > 1000u)
+			{
+				rub_LongPressFlag = TRUE;
+			}
+		else
+			{
+				TimeState++;
+			}
 		}
-	else if(TimeState > 1000u)
+		else
 		{
-			rub_flag_X = FALSE;
+
 		}
-
-
+	}
+}
 //lub_ButtonState[0] = GPIO_ReadPinInput(GPIOD, 0);
 //lub_ButtonState[1] = GPIO_ReadPinInput(GPIOD, 2);
 //lub_ButtonState[2] = GPIO_ReadPinInput(GPIOD, 3);
