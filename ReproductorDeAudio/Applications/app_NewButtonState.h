@@ -9,6 +9,8 @@
 #define APP_NEWBUTTONSTATE_H_
 
 #include "app_ReadInput.h"
+#include "app_Debounce.h"
+#include "app_PITFlag.h"
 
 
 #endif /* APP_NEWBUTTONSTATE_H_ */
