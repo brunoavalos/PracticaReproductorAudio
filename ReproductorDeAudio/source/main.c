@@ -23,6 +23,7 @@
 #include "Applications/app_Debounce.h"
 #include "Applications/app_ReadInput.h"
 #include "Applications/app_PITFlag.h"
+#include "Applications/app_NewButtonState.h"
 
 /* Variables Globales */
 
@@ -55,6 +56,8 @@ int main(void)
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
+
+
 
     }
     return 0;

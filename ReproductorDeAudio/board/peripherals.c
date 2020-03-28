@@ -111,6 +111,7 @@ void app_PIT_Init(void)
     EnableIRQ(PIT_IRQn);
     PIT_StartTimer(PIT, kPIT_Chnl_1);
 
+
 }
 
 /***********************************************
