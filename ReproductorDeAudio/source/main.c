@@ -23,6 +23,7 @@
 #include "Applications/app_Debounce.h"
 #include "Applications/app_ReadInput.h"
 #include "Applications/app_PITFlag.h"
+#include "Applications/app_TrackIndicator.h"
 
 /* Variables Globales */
 
@@ -55,7 +56,7 @@ int main(void)
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
-
+        	app_TrackIndicatorOutput(3U);
     }
     return 0;
 
