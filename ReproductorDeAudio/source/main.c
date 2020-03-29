@@ -40,9 +40,11 @@ int main(void)
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
     BOARD_BootClockRUN();
-  	/* Init FSL debug console. */
+
+    /* Init FSL debug console. */
     BOARD_InitDebugConsole();
     app_PWM_Init();
+
     while(1)
     {
 
