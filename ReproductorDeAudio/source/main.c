@@ -56,6 +56,7 @@ int main(void)
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
+        	app_NewButtonState_Task();
 
 
 

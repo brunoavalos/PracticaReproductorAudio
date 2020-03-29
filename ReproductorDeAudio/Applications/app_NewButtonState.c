@@ -36,21 +36,23 @@ typedef enum
 
 T_ButtonState BtnState = Btn_Unpressed;
 
-
+T_UBYTE lub_o;
 
 void app_NewButtonInputValue(void)
 {
-	for(lub_o = 0u; o <= NUMBERS_BUTTON; lub_o++)
+	for(lub_o = 0u; lub_o <= NUMBERS_BUTTON; lub_o++)
 	{
 		if(lub_ButtonState[lub_o] == FALSE)
 		{
 			if(TimeState >= 50u && TimeState <= 1000u)
 			{
 				rub_NormalPressFlag = TRUE;
+				lub_o = false;
 			}
 		else if(TimeState > 1000u)
 			{
 				rub_LongPressFlag = TRUE;
+				lub_o = false;
 			}
 		else
 			{
@@ -71,9 +73,11 @@ void app_NewButtonInputValue(void)
 	//lub_ButtonState[1] -> Next/Fordward
 	//lub_ButtonState[2] -> Back/Rewind
 
+void app_NewButtonFinalState(void)
+{
 
 for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
-{
+  {
 	/* If button has a valid press, then perform the corresponding actions*/
 	if(BtnState == Btn_Pressed)
 	{
@@ -87,14 +91,17 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 				if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == FALSE))
 							{
 								/*Btn [0] -> Funcion Stop Rotabit*/
+										rub_flagPIT1 = FALSE;
 
-							}else if((rub_flagPIT1 == FALSE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
+							}else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
 							{
 								/*Btn [1] -> Funcion Fordward*/
+										rub_flagPIT1 = FALSE;
 
-							}else if((rub_flagPIT1 == FALSE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
+							}else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
 							{
 								/*Btn [2] -> Funcion Backward*/
+										rub_flagPIT1 = FALSE;
 
 							}else{/*Do nothing*/}
 
@@ -106,13 +113,15 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 			if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == FALSE))
 						{
 						/*Btn [0] -> Funcion Play/Pause Rotabit*/;
+
 						app_RotabitCounterFoward();
-						rub_flagPIT1 = FALSE;
+
 						}else if((rub_flagPIT1 == FALSE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
 						{
 						/*Btn [1] -> Funcion Next*/
 
-						}else if((rub_flagPIT1 == FALSE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
+
+						}else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
 						{
 							/*Btn [2] -> Funcion Back*/
 
@@ -147,7 +156,7 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 		}break;
 		}
 	}
-}
+  }
 
 
 }
@@ -156,6 +165,7 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 void app_NewButtonState_Task(void)
 {
 	app_NewButtonInputValue();
+	app_NewButtonFinalState();
 	/*app_NewButtonCounter();*/
 
 }
