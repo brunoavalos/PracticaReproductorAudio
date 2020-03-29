@@ -20,7 +20,6 @@
 #include "typedef_macros.h"
 #include "Macros.h"
 #include "Applications/app_RotabitCounter.h"
-#include "Applications/app_Debounce.h"
 #include "Applications/app_ReadInput.h"
 #include "Applications/app_PITFlag.h"
 #include "Applications/app_NewButtonState.h"
@@ -46,18 +45,18 @@ int main(void)
     app_PWM_Init();
     while(1)
     {
-		if((rub_flagPIT1) == TRUE && (rub_flagPIT0 == FALSE))
-		{
-			app_RotabitCounterFoward();
-			rub_flagPIT1 = FALSE;
-		}
+
     		app_ReadInputValue();
     		//app_Debounce_TaskMngr();
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
         	app_NewButtonState_Task();
-
+        	if((rub_flagPIT1) == TRUE)
+        						{
+        							app_RotabitCounterFoward();
+        							rub_flagPIT1 = FALSE;
+        						}
 
 
     }

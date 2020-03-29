@@ -11,6 +11,7 @@
 
 /* Valor de los botones */
 
+void app_NewButtonFinalState(void);
 extern T_UBYTE lub_ButtonState[2]; /* 0 1 2 Guarda los estado logicos de los botones*/
 T_UBYTE lub_i = 0u;
 T_UBYTE rub_Back_Btn_Flag = 0u;
@@ -44,27 +45,38 @@ void app_NewButtonInputValue(void)
 	{
 		if(lub_ButtonState[lub_o] == FALSE)
 		{
-			for(rub_TimeState = 0u;(rub_NormalPressFlag == TRUE) || (rub_LongPressFlag = TRUE); rub_TimeState++)
+			for(rub_TimeState = 0u;; rub_TimeState++)
+			{
 				if(rub_TimeState >= 50u && rub_TimeState <= 1000u)
 				{
 					rub_NormalPressFlag = TRUE;
 					lub_o = false;
+					BtnState = Btn_Pressed;
+					StateButton = LongPress;
+					rub_Back_Btn_Flag == TRUE;
+					app_NewButtonFinalState();
 				}
-				else if(rub_TimeState > 1000u)
+				if(rub_TimeState > 1000u)
 				{
 					rub_LongPressFlag = TRUE;
 					lub_o = false;
+					rub_TimeState = 0u;
+					BtnState = Btn_Pressed;
+					StateButton = NormalPress;
+					app_NewButtonFinalState();
 				}
+				else
+				{
+					/* Do nothing */
+				}
+			}
 		}
 		else
 		{
-
+			/* Do nothing */
 		}
 	}
 }
-//lub_ButtonState[0] = GPIO_ReadPinInput(GPIOD, 0);
-//lub_ButtonState[1] = GPIO_ReadPinInput(GPIOD, 2);
-//lub_ButtonState[2] = GPIO_ReadPinInput(GPIOD, 3);
 
 	//lub_ButtonState[0] -> Play/Pause/Stop
 	//lub_ButtonState[1] -> Next/Fordward
@@ -91,17 +103,32 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 
 										rub_flagPIT0 = FALSE;
 
-							}else if((rub_flagPIT0 == TRUE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
+							}
+							else if((rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
 							{
+								if(rub_flagPIT0 == TRUE)
+								{
 								/*Btn [1] -> Funcion Fordward*/
 										app_RotabitCounterFoward();
+										rub_Back_Btn_Flag = FALSE;
+										rub_Next_Btn_Flag = FALSE;
 										rub_flagPIT0 = FALSE;
+										rub_TimeState = 0u;
+								}
 
-							}else if((rub_flagPIT0 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
+							}
+							else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
 							{
-								/*Btn [2] -> Funcion Backward*/
-										app_RotabitCounterBackward();
-										rub_flagPIT0 = FALSE;
+
+								if(rub_flagPIT0 == TRUE)
+								{
+									/*Btn [2] -> Funcion Backward*/
+									app_RotabitCounterFoward();
+									rub_Back_Btn_Flag = FALSE;
+									rub_Next_Btn_Flag = FALSE;
+									rub_flagPIT0 = FALSE;
+									rub_TimeState = 0u;
+								}
 
 							}else{/*Do nothing*/}
 
@@ -143,10 +170,12 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 		case BUTTON0:
 		{
 
+
 		}break;
 		/*Actions for BUTTON 1*/
 		case BUTTON1:
 		{
+
 
 		}break;
 		/*Actions for not valid BUTTON*/
@@ -165,7 +194,7 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 void app_NewButtonState_Task(void)
 {
 	app_NewButtonInputValue();
-	app_NewButtonFinalState();
+
 	/*app_NewButtonCounter();*/
 
 }
