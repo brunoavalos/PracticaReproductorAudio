@@ -56,7 +56,7 @@ int main(void)
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
-        	app_TrackIndicatorOutput(3U);
+        	app_TrackNumber();
     }
     return 0;
 

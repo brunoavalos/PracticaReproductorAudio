@@ -13,6 +13,7 @@
 #include "../CMSIS/MKL25Z4.h"
 
 extern void app_TrackIndicatorOutput(T_UBYTE OutputVAlue);
+extern void app_TrackNumber(void);
 /* Definiendo los puertos y pines para el indicador del Track */
 #define TrackPORT 				PORTC
 #define TrackGPORT				GPIOC
