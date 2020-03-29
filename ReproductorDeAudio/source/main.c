@@ -22,7 +22,7 @@
 #include "Applications/app_RotabitCounter.h"
 #include "Applications/app_ReadInput.h"
 #include "Applications/app_PITFlag.h"
-#include "Applications/app_NewButtonState.h"
+#include "Applications/app_TrackIndicator.h"
 
 /* Variables Globales */
 
@@ -51,14 +51,7 @@ int main(void)
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
-        	app_NewButtonState_Task();
-        	if((rub_flagPIT1) == TRUE)
-        						{
-        							app_RotabitCounterFoward();
-        							rub_flagPIT1 = FALSE;
-        						}
-
-
+        	app_TrackNumber();
     }
     return 0;
 

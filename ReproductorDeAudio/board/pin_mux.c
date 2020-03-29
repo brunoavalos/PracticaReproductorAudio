@@ -43,6 +43,7 @@ PinsProfile:
 #include "fsl_port.h"
 #include "fsl_gpio.h"
 #include "pin_mux.h"
+#include "Applications/app_TrackIndicator.h"
 
 #define PIN1_IDX                         1u   /*!< Pin number for pin 1 in a port */
 #define PIN2_IDX                         2u   /*!< Pin number for pin 2 in a port */
@@ -86,7 +87,9 @@ void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_PortE);
   /* Port D Clock Gate Control: Clock enabled */
   CLOCK_EnableClock(kCLOCK_PortD);
-  /* PORTB19 (pin 54) is configured as TPM2_CH1 */
+  /* Port C Clock Gate Control: Clock enabled */
+  CLOCK_EnableClock(kCLOCK_PortC);
+
 
   PORT_SetPinMux(PORT_LED_GREEN, PIN_LED_GREEN, kPORT_MuxAlt3);
 
@@ -110,6 +113,26 @@ void BOARD_InitPins(void) {
      };
      /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
      GPIO_PinInit(BOARD_INITPINS_GPIOB, BOARD_INITPINS_BIT2_PIN, &BIT2_config);
+
+     /* Inicialización de los pines del puerto C */
+     gpio_pin_config_t Track0_config = {
+              .pinDirection = kGPIO_DigitalOutput,
+              .outputLogic = 0U
+          };
+          /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
+     GPIO_PinInit(TrackGPORT, TrackPIN0, &Track0_config);
+
+     gpio_pin_config_t Track1_config = {
+                  .pinDirection = kGPIO_DigitalOutput,
+                  .outputLogic = 0U
+              };
+              /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
+         GPIO_PinInit(TrackGPORT, TrackPIN1, &Track1_config);
+
+       PORT_SetPinMux(TrackPORT, TrackPIN0, kPORT_MuxAsGpio);
+
+       PORT_SetPinMux(TrackPORT, TrackPIN1, kPORT_MuxAsGpio);
+     /* Finalización de declaración de puerto C como salida */
 
      gpio_pin_config_t BIT3_config = {
          .pinDirection = kGPIO_DigitalOutput,
