@@ -16,7 +16,7 @@ T_UBYTE lub_i = 0u;
 T_UBYTE rub_Back_Btn_Flag = 0u;
 T_UBYTE rub_Next_Btn_Flag = 0u;
 
-T_UBYTE TimeState = 0u;
+T_UBYTE rub_TimeState = 0u;
 T_UBYTE rub_NormalPressFlag = 0u;
 T_UBYTE rub_LongPressFlag = 0u;
 
@@ -44,20 +44,17 @@ void app_NewButtonInputValue(void)
 	{
 		if(lub_ButtonState[lub_o] == FALSE)
 		{
-			if(TimeState >= 50u && TimeState <= 1000u)
-			{
-				rub_NormalPressFlag = TRUE;
-				lub_o = false;
-			}
-		else if(TimeState > 1000u)
-			{
-				rub_LongPressFlag = TRUE;
-				lub_o = false;
-			}
-		else
-			{
-				TimeState++;
-			}
+			for(rub_TimeState = 0u;(rub_NormalPressFlag == TRUE) || (rub_LongPressFlag = TRUE); rub_TimeState++)
+				if(rub_TimeState >= 50u && rub_TimeState <= 1000u)
+				{
+					rub_NormalPressFlag = TRUE;
+					lub_o = false;
+				}
+				else if(rub_TimeState > 1000u)
+				{
+					rub_LongPressFlag = TRUE;
+					lub_o = false;
+				}
 		}
 		else
 		{
@@ -88,20 +85,23 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 		{
 
 				/* > 1000ms*/
-				if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == FALSE))
+				if((rub_flagPIT0 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == FALSE))
 							{
 								/*Btn [0] -> Funcion Stop Rotabit*/
-										rub_flagPIT1 = FALSE;
 
-							}else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
+										rub_flagPIT0 = FALSE;
+
+							}else if((rub_flagPIT0 == TRUE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
 							{
 								/*Btn [1] -> Funcion Fordward*/
-										rub_flagPIT1 = FALSE;
+										app_RotabitCounterFoward();
+										rub_flagPIT0 = FALSE;
 
-							}else if((rub_flagPIT1 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
+							}else if((rub_flagPIT0 == TRUE) && (rub_Back_Btn_Flag == FALSE) && (rub_Next_Btn_Flag == TRUE))
 							{
 								/*Btn [2] -> Funcion Backward*/
-										rub_flagPIT1 = FALSE;
+										app_RotabitCounterBackward();
+										rub_flagPIT0 = FALSE;
 
 							}else{/*Do nothing*/}
 
@@ -114,7 +114,7 @@ for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
 						{
 						/*Btn [0] -> Funcion Play/Pause Rotabit*/;
 
-						app_RotabitCounterFoward();
+
 
 						}else if((rub_flagPIT1 == FALSE) && (rub_Back_Btn_Flag == TRUE) && (rub_Next_Btn_Flag == FALSE))
 						{

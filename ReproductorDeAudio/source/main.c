@@ -52,7 +52,7 @@ int main(void)
 			rub_flagPIT1 = FALSE;
 		}
     		app_ReadInputValue();
-    		app_Debounce_TaskMngr();
+    		//app_Debounce_TaskMngr();
     		app_ADC_Task();
     		app_PWMProcentValue();
         	app_PWM_Value();
