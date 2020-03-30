@@ -27,6 +27,7 @@ T_UBYTE lub_i;
 T_UBYTE rub_Play;
 T_UBYTE rub_ButtonPlay;
 T_UBYTE rub_PlayRotabit;
+T_UBYTE rub_LongPressFlag = FALSE;
 /******************************************
  * Code
  ******************************************/
@@ -89,27 +90,26 @@ static void app_Debounce_IncreaseDbncCounter(void) {
 		/* Check if the counter hasn't reached its max limit */
 		if ((raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER)
 				&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
-			if (raub_ButtonDebounceCounters[2] == FALSE) {
-				rub_ButtonPlay = TRUE;
-				rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
-				raub_ButtonDebounceCounters[lub_i] = 0u;
-			} else {
-				rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
-				raub_ButtonDebounceCounters[lub_i] = 0u;
-			}
+			rub_LongPressFlag = TRUE;
+			rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
+			raub_ButtonDebounceCounters[lub_i] = 0u;
+
 		}
-		if (raub_ButtonDebounceCounters[lub_i] > NUMBER_COUNTER) { //Counter is in the limit
-			/* Valid State */
-			if (raub_ButtonDebounceCounters[2] == FALSE) {
-				rub_ButtonPlay = TRUE;
-				rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-				raub_ButtonDebounceCounters[lub_i] = 0u;
-			} else {
-				rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-				raub_ButtonDebounceCounters[lub_i] = 0u;
-			}
-		} else { //Counter has not reached a valid value
+		else { //Counter has not reached a valid value
+			if (raub_ButtonDebounceCounters[lub_i] == NUMBER_COUNTER) { //Counter is in the limit
+						/* Valid State */
+						if (raub_ButtonDebounceCounters[2] == FALSE) {
+							rub_ButtonPlay = TRUE;
+							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+							raub_ButtonDebounceCounters[lub_i] = 0u;
+						} else {
+							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+							raub_ButtonDebounceCounters[lub_i] = 0u;
+						}
+					}
+			else{
 			raub_ButtonDebounceCounters[lub_i]++;
+			}
 		}
 		rub_flagPIT0 = FALSE;
 	}
@@ -142,17 +142,19 @@ static void app_Debounce_Actions(void) {
 			switch (lub_x) {
 			/*Actions for BUTTON 0*/
 			case 0: {
-				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
+					lub_Output = 0u;
 					app_PreviousTrack();
-					rub_flagPIT1 = FALSE;
+					rub_flagPIT2 = FALSE;
 				}
 			}
 				break;
 				/*Actions for BUTTON 1*/
 			case 1: {
-				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
+					lub_Output = 0u;
 					app_NextTrack();
-					rub_flagPIT1 = FALSE;
+					rub_flagPIT2 = FALSE;
 				}
 
 			}
@@ -177,18 +179,18 @@ static void app_Debounce_Actions(void) {
 				switch (lub_x) {
 				/*Actions for BUTTON 0*/
 				case 0: {
-					if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
+					if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == TRUE)) {
 						app_RotabitCounterBackward();
-						rub_flagPIT2 = FALSE;
+						rub_flagPIT1 = FALSE;
 					}
 				}
 					break;
 					/*Actions for BUTTON 1*/
 				case 1: {
-					if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
+					if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == TRUE)) {
 
 						app_RotabitCounterFoward();
-						rub_flagPIT2 = FALSE;
+						rub_flagPIT1 = FALSE;
 					}
 
 				}
@@ -214,10 +216,10 @@ static void app_Debounce_Actions(void) {
 				break;
 				/*Actions for BUTTON 1*/
 			case BUTTON1: {
-				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
 					app_RotabitCounterFoward();
 					rub_PlayRotabit = TRUE;
-					rub_flagPIT1 = FALSE;
+					rub_flagPIT2 = FALSE;
 				} else {
 					/* Do nothing */
 				}
