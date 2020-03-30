@@ -86,7 +86,7 @@ void app_Debounce_CheckButtonsState(void)
  * Description: TBD
  ***********************************************/
 static void app_Debounce_IncreaseDbncCounter(void) {
-	if (rub_flagPIT0 == TRUE) {
+
 		/* Check if the counter hasn't reached its max limit */
 		if ((raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER)
 				&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
@@ -111,8 +111,7 @@ static void app_Debounce_IncreaseDbncCounter(void) {
 			raub_ButtonDebounceCounters[lub_i]++;
 			}
 		}
-		rub_flagPIT0 = FALSE;
-	}
+
 }
 
 /***********************************************
