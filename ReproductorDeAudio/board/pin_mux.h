@@ -36,6 +36,7 @@
  * Definitions
  ******************************************************************************/
 
+extern void BOARD_InitBootPins(void);
 /*! @brief Direction type  */
 typedef enum _pin_mux_direction
 {
