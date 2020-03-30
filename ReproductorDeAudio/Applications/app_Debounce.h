@@ -42,12 +42,12 @@ typedef enum
 }T_BUTTON_STATES;
 
 
-enum
+typedef enum
 {
 	BUTTON0,
 	BUTTON1,
 	BUTTON2
-};
+}Final_Button_State;
 
 
 
