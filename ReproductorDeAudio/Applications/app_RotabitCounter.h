@@ -11,6 +11,7 @@
 #include "fsl_gpio.h"
 #include "typedef_macros.h"
 
+extern T_UBYTE lub_Output;
 
 extern void app_RotabitCounterFoward(void);
 extern void app_RotabitCounterBackward(void);
