@@ -91,6 +91,7 @@ static void app_Debounce_IncreaseDbncCounter(void)
 	{//Counter is in the limit
 		/* Valid State */
 		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+		raub_ButtonDebounceCounters[lub_i] = 0u;
 	}
 	else
 	{//Counter has not reached a valid value
@@ -124,20 +125,23 @@ static void app_Debounce_Actions(void)
 	{
 
 		/* If button has a valid press, then perform the corresponding actions*/
-		if(rae_ButtonsState[lub_x] == BUTTON_PRESSED)
-		{
-			switch(lub_x)
-			{
+		if (rae_ButtonsState[lub_x] == BUTTON_PRESSED) {
+			switch (lub_x) {
 			/*Actions for BUTTON 0*/
-			case BUTTON0: {
+			case 0: {
 				if (rub_flagPIT1 == TRUE) {
 					app_PreviousTrack();
 					rub_flagPIT1 = FALSE;
 				}
 			}
 				break;
-			/*Actions for BUTTON 1*/
-			case BUTTON1: {
+				/*Actions for BUTTON 1*/
+			case 1: {
+
+			}
+				break;
+			case 2: {
+
 				if (rub_flagPIT1 == TRUE) {
 					app_NextTrack();
 					rub_flagPIT1 = FALSE;
@@ -145,46 +149,38 @@ static void app_Debounce_Actions(void)
 
 			}
 				break;
-			case BUTTON2:
-			{
-
-			}break;
-			/*Actions for not valid BUTTON*/
-			default:
-			{
+				/*Actions for not valid BUTTON*/
+			default: {
 				/* Do Nothing */
-			}break;
 			}
-		}
-		else
-		{//Button is not pressed, perform the corresponding action
-			switch(lub_x)
-			{
-			/*Actions for BUTTON 0*/
-			case BUTTON0:
-			{
+				break;
 
-			}break;
-			/*Actions for BUTTON 1*/
-			case BUTTON1:
-			{
+			}
+		} else { //Button is not pressed, perform the corresponding action
+			switch (lub_x) {
+			/*Actions for BUTTON 0*/
+			case BUTTON0: {
+
+			}
+				break;
+				/*Actions for BUTTON 1*/
+			case BUTTON1: {
+
+			}
+				break;
+			case BUTTON2: {
 				if (rub_flagPIT1 == TRUE) {
 					app_RotabitCounterFoward();
 					rub_flagPIT1 = FALSE;
 				}
 
-			}break;
-			case BUTTON2:
-			{
+			}
+				break;
+				/*Actions for not valid BUTTON*/
+			default: {
 
-
-			}break;
-			/*Actions for not valid BUTTON*/
-			default:
-			{
-
-
-			}break;
+			}
+				break;
 			}
 		}
 		lub_x++;
