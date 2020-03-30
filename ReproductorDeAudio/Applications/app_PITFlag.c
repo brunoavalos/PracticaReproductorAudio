@@ -13,23 +13,24 @@
 
 volatile T_UBYTE rub_flagPIT0 = 0u;
 volatile T_UBYTE rub_flagPIT1 = 0u;
+volatile T_UBYTE rub_flagPIT2 = 0u;
 
-void PIT_DriverIRQHandler(void)
-{
+void PIT_DriverIRQHandler(void) {
 	rub_flagPIT0 = PIT_GetStatusFlags(PIT, kPIT_Chnl_0);
 	rub_flagPIT1 = PIT_GetStatusFlags(PIT, kPIT_Chnl_1);
-
-	if(rub_flagPIT1)
-	{
+	rub_flagPIT2 = PIT_GetStatusFlags(PIT, kPIT_Chnl_2);
+	if (rub_flagPIT1) {
 		PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
 	}
-	if(rub_flagPIT0)
-	{
+	if (rub_flagPIT0) {
 
 		PIT_ClearStatusFlags(PIT, 0, kPIT_TimerFlag);
 	}
-	else
-	{ /* Nothing else */}
+	if (rub_flagPIT2) {
+
+		PIT_ClearStatusFlags(PIT, 2, kPIT_TimerFlag);
+	} else { /* Nothing else */
+	}
 }
 
 #endif /* APP_PITFLAG_C_ */
