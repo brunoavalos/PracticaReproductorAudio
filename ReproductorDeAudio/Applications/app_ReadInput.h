@@ -11,6 +11,7 @@
 #include "../drivers/fsl_gpio.h"
 #include "../source/typedef_macros.h"
 #include "app_Debounce.h"
+#include "app_PITFlag.h"
 
 
 extern unsigned char lub_ButtonState[NUMBERS_BUTTON];

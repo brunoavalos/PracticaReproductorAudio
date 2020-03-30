@@ -57,3 +57,5 @@ dkms.conf
 FreeRTOS_TAD_logs/
 
 ReproductorDeAudio/.settings/
+
+*.launch

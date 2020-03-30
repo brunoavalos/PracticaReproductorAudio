@@ -13,4 +13,5 @@ void app_ReadInputValue(void)
 	lub_ButtonState[0] = GPIO_ReadPinInput(GPIOD, 0);
 	lub_ButtonState[1] = GPIO_ReadPinInput(GPIOD, 2);
 	lub_ButtonState[2] = GPIO_ReadPinInput(GPIOD, 3);
+
 }

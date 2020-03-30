@@ -83,6 +83,8 @@ void app_Debounce_CheckButtonsState(void)
  ***********************************************/
 static void app_Debounce_IncreaseDbncCounter(void)
 {
+	if(rub_flagPIT0 == TRUE)
+	{
 	/* Check if the counter hasn't reached its max limit */
 	if(raub_ButtonDebounceCounters[lub_i] >= PULSES_COUNTER)
 	{//Counter is in the limit
@@ -92,6 +94,8 @@ static void app_Debounce_IncreaseDbncCounter(void)
 	else
 	{//Counter has not reached a valid value
 		raub_ButtonDebounceCounters[lub_i]++;
+	}
+	rub_flagPIT0 = FALSE;
 	}
 }
 
@@ -132,6 +136,7 @@ static void app_Debounce_Actions(void)
 			case BUTTON1: {
 				if (rub_flagPIT1 == TRUE) {
 					app_TrackNumber();
+					rub_flagPIT1 = FALSE;
 				}
 
 			}
@@ -159,20 +164,22 @@ static void app_Debounce_Actions(void)
 			/*Actions for BUTTON 1*/
 			case BUTTON1:
 			{
-
+				if (rub_flagPIT1 == TRUE) {
+					app_RotabitCounterFoward();
+					rub_flagPIT1 = FALSE;
+				}
 
 			}break;
 			case BUTTON2:
 			{
-				if (rub_flagPIT1 == TRUE) {
-					app_RotabitCounterFoward();
-				}
+
 
 			}break;
 			/*Actions for not valid BUTTON*/
 			default:
 			{
-				/* Do Nothing */
+
+
 			}break;
 			}
 		}
