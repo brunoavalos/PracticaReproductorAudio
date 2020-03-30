@@ -117,11 +117,11 @@ static void app_Debounce_Actions(void)
 	/* Check internal button states */
 	while(lub_x < NUMBERS_BUTTON)
 	{
-		lub_x++;
+
 		/* If button has a valid press, then perform the corresponding actions*/
 		if(rae_ButtonsState[lub_x] == BUTTON_PRESSED)
 		{
-			switch(lub_i)
+			switch(lub_x)
 			{
 			/*Actions for BUTTON 0*/
 			case BUTTON0:
@@ -181,6 +181,7 @@ static void app_Debounce_Actions(void)
 			}break;
 			}
 		}
+		lub_x++;
 	}
 }
 
