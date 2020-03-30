@@ -9,6 +9,7 @@
 #include "app_ReadInput.h"
 #include "app_PITFlag.h"
 
+
 /******************************************
  * Prototypes
  ******************************************/
@@ -128,14 +129,17 @@ static void app_Debounce_Actions(void)
 			switch(lub_x)
 			{
 			/*Actions for BUTTON 0*/
-			case BUTTON0:
-			{
-
-			}break;
+			case BUTTON0: {
+				if (rub_flagPIT1 == TRUE) {
+					app_PreviousTrack();
+					rub_flagPIT1 = FALSE;
+				}
+			}
+				break;
 			/*Actions for BUTTON 1*/
 			case BUTTON1: {
 				if (rub_flagPIT1 == TRUE) {
-					app_TrackNumber();
+					app_NextTrack();
 					rub_flagPIT1 = FALSE;
 				}
 

@@ -14,7 +14,9 @@
 #include "app_Debounce.h"
 
 extern void app_TrackIndicatorOutput(T_UBYTE OutputVAlue);
-extern void app_TrackNumber(void);
+extern void app_NextTrack(void);
+extern void app_PreviousTrack(void);
+
 /* Definiendo los puertos y pines para el indicador del Track */
 #define TrackPORT 				PORTC
 #define TrackGPORT				GPIOC
