@@ -29,7 +29,7 @@ extern T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
 	}
 
 	void app_PreviousTrack(void) {
-		if (lub_ButtonState[2] == FALSE) {
+		if (lub_ButtonState[0] == FALSE) {
 			lub_ActualTrack = lub_ActualTrack - 1;
 			app_TrackIndicatorOutput(lub_ActualTrack);
 		}

@@ -24,7 +24,9 @@ static void app_Debounce_Actions();
 T_BUTTON_STATES rae_ButtonsState[NUMBERS_BUTTON];
 T_UWORD	raub_ButtonDebounceCounters[NUMBERS_BUTTON];
 T_UBYTE lub_i;
-
+T_UBYTE rub_Play;
+T_UBYTE rub_ButtonPlay;
+T_UBYTE rub_PlayRotabit;
 /******************************************
  * Code
  ******************************************/
@@ -90,8 +92,17 @@ static void app_Debounce_IncreaseDbncCounter(void)
 	if(raub_ButtonDebounceCounters[lub_i] >= PULSES_COUNTER)
 	{//Counter is in the limit
 		/* Valid State */
-		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-		raub_ButtonDebounceCounters[lub_i] = 0u;
+		if(raub_ButtonDebounceCounters[2] == FALSE)
+		{
+			rub_ButtonPlay = TRUE;
+			rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+			raub_ButtonDebounceCounters[lub_i] = 0u;
+		}
+		else
+		{
+			rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+			raub_ButtonDebounceCounters[lub_i] = 0u;
+		}
 	}
 	else
 	{//Counter has not reached a valid value
@@ -117,19 +128,18 @@ static void app_Debounce_ClearDbncCounter(void)
  * Function Name: app_Debounce_Actions
  * Description: TBD
  ***********************************************/
-static void app_Debounce_Actions(void)
-{
+static void app_Debounce_Actions(void) {
 	T_UBYTE lub_x = 0;
+
 	/* Check internal button states */
-	while(lub_x < NUMBERS_BUTTON)
-	{
+	while (lub_x < NUMBERS_BUTTON) {
 
 		/* If button has a valid press, then perform the corresponding actions*/
 		if (rae_ButtonsState[lub_x] == BUTTON_PRESSED) {
 			switch (lub_x) {
 			/*Actions for BUTTON 0*/
 			case 0: {
-				if (rub_flagPIT1 == TRUE) {
+				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
 					app_PreviousTrack();
 					rub_flagPIT1 = FALSE;
 				}
@@ -137,16 +147,20 @@ static void app_Debounce_Actions(void)
 				break;
 				/*Actions for BUTTON 1*/
 			case 1: {
-
-			}
-				break;
-			case 2: {
-
-				if (rub_flagPIT1 == TRUE) {
+				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
 					app_NextTrack();
 					rub_flagPIT1 = FALSE;
 				}
 
+			}
+				break;
+			case 2: {
+				if ((rub_PlayRotabit == TRUE) && (rub_Play == TRUE)
+						&& (rub_ButtonPlay = TRUE)) {
+					rub_Play = FALSE;
+				} else {
+					rub_Play = TRUE;
+				}
 			}
 				break;
 				/*Actions for not valid BUTTON*/
@@ -165,14 +179,18 @@ static void app_Debounce_Actions(void)
 				break;
 				/*Actions for BUTTON 1*/
 			case BUTTON1: {
+				if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE)) {
+					app_RotabitCounterFoward();
+					rub_PlayRotabit = TRUE;
+					rub_flagPIT1 = FALSE;
+				}
+				else {
+					/* Do nothing */
+				}
 
 			}
 				break;
 			case BUTTON2: {
-				if (rub_flagPIT1 == TRUE) {
-					app_RotabitCounterFoward();
-					rub_flagPIT1 = FALSE;
-				}
 
 			}
 				break;
