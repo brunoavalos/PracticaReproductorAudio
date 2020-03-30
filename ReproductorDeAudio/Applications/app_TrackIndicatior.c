@@ -8,17 +8,10 @@
 #include "app_TrackIndicator.h"
 #include "app_ReadInput.h"
 
+static T_UBYTE lub_ActualTrack = 0u;
 void app_TrackNumber(void){
 
 extern T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
-/*T_UBYTE rub_2ndBtn_flag = 0;*/
-T_UBYTE lub_TrackNumber;
-/*T_UBYTE lub_PrevTrack = 0u;*/
-T_UBYTE lub_ActualTrack = 0u;
-//STOP
-//PLAY
-
-		lub_TrackNumber = lub_ActualTrack;
 
 		if(lub_ActualTrack < 0)
 		{

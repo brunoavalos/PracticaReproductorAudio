@@ -84,7 +84,7 @@ void app_Debounce_CheckButtonsState(void)
 static void app_Debounce_IncreaseDbncCounter(void)
 {
 	/* Check if the counter hasn't reached its max limit */
-	if(raub_ButtonDebounceCounters[lub_i] >= APP_BTNDBNC_DBNC_VALID_COUNT)
+	if(raub_ButtonDebounceCounters[lub_i] >= NORMAL_BUTTON_COUNT)
 	{//Counter is in the limit
 		/* Valid State */
 		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
@@ -117,11 +117,11 @@ static void app_Debounce_Actions(void)
 	/* Check internal button states */
 	while(lub_x < NUMBERS_BUTTON)
 	{
-		lub_x++;
+
 		/* If button has a valid press, then perform the corresponding actions*/
 		if(rae_ButtonsState[lub_x] == BUTTON_PRESSED)
 		{
-			switch(lub_i)
+			switch(lub_x)
 			{
 			/*Actions for BUTTON 0*/
 			case BUTTON0:
@@ -181,6 +181,7 @@ static void app_Debounce_Actions(void)
 			}break;
 			}
 		}
+		lub_x++;
 	}
 }
 
