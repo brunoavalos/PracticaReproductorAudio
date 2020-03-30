@@ -7,7 +7,7 @@
 
 #include "app_ReadInput.h"
 
-T_UBYTE lub_ButtonState[2];
+T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
 void app_ReadInputValue(void)
 {
 	lub_ButtonState[0] = GPIO_ReadPinInput(GPIOD, 0);

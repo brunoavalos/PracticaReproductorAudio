@@ -13,8 +13,8 @@
  * Prototypes
  ******************************************/
 static void app_Debounce_CheckButtonsState(void);
-static void app_Debounce_IncreaseDbncCounter(T_UBYTE lub_ButtonNumber);
-static void app_Debounce_ClearDbncCounter(T_UBYTE lub_ButtonNumber);
+static void app_Debounce_IncreaseDbncCounter(void);
+static void app_Debounce_ClearDbncCounter(void);
 static void app_Debounce_Actions();
 
 /******************************************
@@ -22,7 +22,7 @@ static void app_Debounce_Actions();
  ******************************************/
 T_BUTTON_STATES rae_ButtonsState[NUMBERS_BUTTON];
 T_UWORD	raub_ButtonDebounceCounters[NUMBERS_BUTTON];
-
+T_UBYTE lub_i;
 
 /******************************************
  * Code
@@ -62,17 +62,17 @@ void app_Debounce_TaskMngr(void)
  ***********************************************/
 void app_Debounce_CheckButtonsState(void)
 {
-	T_UBYTE lub_i;
+
 	/* Check the buttons state */
 	for(lub_i = 0; lub_i < NUMBERS_BUTTON;lub_i++)
 	{//Check for each button
 		if(lub_ButtonState[lub_i] == FALSE)
 		{//Button pressed in HW
-			app_Debounce_IncreaseDbncCounter(lub_i);
+			app_Debounce_IncreaseDbncCounter();
 		}
 		else
 		{//Button unpressed in SW
-			app_Debounce_ClearDbncCounter(lub_i);
+			app_Debounce_ClearDbncCounter();
 		}
 	}
 }
@@ -81,17 +81,17 @@ void app_Debounce_CheckButtonsState(void)
  * Function Name: app_Debounce_IncreaseDbncCounter
  * Description: TBD
  ***********************************************/
-static void app_Debounce_IncreaseDbncCounter(T_UBYTE lub_ButtonNumber)
+static void app_Debounce_IncreaseDbncCounter(void)
 {
 	/* Check if the counter hasn't reached its max limit */
-	if(raub_ButtonDebounceCounters[lub_ButtonNumber] >= APP_BTNDBNC_DBNC_VALID_COUNT)
+	if(raub_ButtonDebounceCounters[lub_i] >= APP_BTNDBNC_DBNC_VALID_COUNT)
 	{//Counter is in the limit
 		/* Valid State */
-		rae_ButtonsState[lub_ButtonNumber] = BUTTON_PRESSED;
+		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
 	}
 	else
 	{//Counter has not reached a valid value
-		raub_ButtonDebounceCounters[lub_ButtonNumber]++;
+		raub_ButtonDebounceCounters[lub_i]++;
 	}
 }
 
@@ -99,48 +99,43 @@ static void app_Debounce_IncreaseDbncCounter(T_UBYTE lub_ButtonNumber)
  * Function Name: app_Debounce_ClearDbncCounter
  * Description: TBD
  ***********************************************/
-static void app_Debounce_ClearDbncCounter(T_UBYTE lub_ButtonNumber)
+static void app_Debounce_ClearDbncCounter(void)
 {
 	/* Clear debounce counter */
-	raub_ButtonDebounceCounters[lub_ButtonNumber] = 0U;
+	raub_ButtonDebounceCounters[lub_i] = 0U;
 	/* Clear button state */
-	rae_ButtonsState[lub_ButtonNumber] = BUTTON_UNPRESSED;
+	rae_ButtonsState[lub_i] = BUTTON_UNPRESSED;
 }
 
 /***********************************************
  * Function Name: app_Debounce_Actions
  * Description: TBD
  ***********************************************/
-static void app_Debounce_Actions()
+static void app_Debounce_Actions(void)
 {
-	T_UBYTE lub_i;
+	T_UBYTE lub_x = 0;
 	/* Check internal button states */
-	for(lub_i = 0; lub_i < NUMBERS_BUTTON; lub_i++)
+	while(lub_x < NUMBERS_BUTTON)
 	{
+		lub_x++;
 		/* If button has a valid press, then perform the corresponding actions*/
-		if(rae_ButtonsState[lub_i] == BUTTON_PRESSED)
+		if(rae_ButtonsState[lub_x] == BUTTON_PRESSED)
 		{
 			switch(lub_i)
 			{
 			/*Actions for BUTTON 0*/
 			case BUTTON0:
 			{
-				if(rub_flagPIT0 == TRUE)
-				{
-					app_RotabitCounterBackward();
-					PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
-					rub_flagPIT0 = FALSE;
-				}
+				app_TrackNumber();
 			}break;
 			/*Actions for BUTTON 1*/
 			case BUTTON1:
 			{
-				if(rub_flagPIT0 == TRUE)
-				{
-					app_RotabitCounterFoward();
-					PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
-					rub_flagPIT0 = FALSE;
-				}
+
+			}break;
+			case BUTTON2:
+			{
+
 			}break;
 			/*Actions for not valid BUTTON*/
 			default:
@@ -151,17 +146,33 @@ static void app_Debounce_Actions()
 		}
 		else
 		{//Button is not pressed, perform the corresponding action
-			switch(lub_i)
+			switch(lub_x)
 			{
 			/*Actions for BUTTON 0*/
 			case BUTTON0:
 			{
-
+				if(rub_flagPIT0 == TRUE)
+				{
+					app_RotabitCounterFoward();
+					rub_flagPIT0 = FALSE;
+				}
 			}break;
 			/*Actions for BUTTON 1*/
 			case BUTTON1:
 			{
-
+				if(rub_flagPIT0 == TRUE)
+								{
+									app_RotabitCounterFoward();
+									rub_flagPIT0 = FALSE;
+								}
+			}break;
+			case BUTTON2:
+			{
+				if(rub_flagPIT0 == TRUE)
+								{
+									app_RotabitCounterFoward();
+									rub_flagPIT0 = FALSE;
+								}
 			}break;
 			/*Actions for not valid BUTTON*/
 			default:
@@ -172,5 +183,7 @@ static void app_Debounce_Actions()
 		}
 	}
 }
+
+
 
 

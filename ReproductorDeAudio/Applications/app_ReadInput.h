@@ -10,9 +10,10 @@
 
 #include "../drivers/fsl_gpio.h"
 #include "../source/typedef_macros.h"
+#include "app_Debounce.h"
 
 
-extern unsigned char lub_ButtonState[2];
+extern unsigned char lub_ButtonState[NUMBERS_BUTTON];
 extern void app_ReadInputValue(void);
 
 #endif /* APP_READINPUT_H_ */

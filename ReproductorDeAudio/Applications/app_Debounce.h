@@ -8,6 +8,7 @@
 
 #include "../source/typedef_macros.h"
 #include "app_RotabitCounter.h"
+#include "app_TrackIndicator.h"
 
 
 #ifndef APP_DEBOUNCE_H_
@@ -17,7 +18,7 @@
  * Macros
  ******************************************/
 
-#define NUMBERS_BUTTON 					((T_UBYTE)2)
+#define NUMBERS_BUTTON 					((T_UBYTE)3)
 #define APP_BTNDBNC_DBNC_VALID_COUNT	((T_UWORD)3000U)
 
 
@@ -43,7 +44,7 @@ enum
 {
 	BUTTON0,
 	BUTTON1,
-	N_BUTTONS
+	BUTTON2
 };
 
 

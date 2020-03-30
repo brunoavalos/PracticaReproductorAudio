@@ -36,6 +36,7 @@
 #define PIT_CLK_SRC_HZ_HP 											((uint64_t)24000000)
 #define CLK_500ms 													500
 #define CLK_100ms													100
+#define CLK_22us													0.022
 #define OUTPT_OFF 													0x01u
 #define OUTPT_ON 													0x00u
 
