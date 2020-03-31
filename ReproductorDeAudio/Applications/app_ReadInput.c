@@ -16,5 +16,4 @@ void app_ReadInputValue(void)
 	lub_ButtonState[1] = GPIO_ReadPinInput(GPIOD, 2);
 	/* Play Buttom PTD3*/
 	lub_ButtonState[2] = GPIO_ReadPinInput(GPIOD, 3);
-
 }
