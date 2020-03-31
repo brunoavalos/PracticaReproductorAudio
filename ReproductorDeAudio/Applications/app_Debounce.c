@@ -111,7 +111,6 @@ void app_DebounceStages(void)
 						break;
 					case 1: {
 						lub_o[lub_i] = 0;
-
 						app_NEXT();
 					}
 						break;
