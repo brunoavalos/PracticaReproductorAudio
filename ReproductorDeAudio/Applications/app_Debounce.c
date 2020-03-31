@@ -92,19 +92,19 @@ static void app_Debounce_IncreaseDbncCounter(void) {
 				&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
 			rub_LongPressFlag = TRUE;
 			rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
-			//raub_ButtonDebounceCounters[lub_i] = 0u;
+//			raub_ButtonDebounceCounters[lub_i] = 0u;
 
 		}
 		else { //Counter has not reached a valid value
-			if (raub_ButtonDebounceCounters[lub_i] == NUMBER_COUNTER) { //Counter is in the limit
+			if (raub_ButtonDebounceCounters[lub_i] > NUMBER_COUNTER) { //Counter is in the limit
 						/* Valid State */
 						if (raub_ButtonDebounceCounters[2] == FALSE) {
 							rub_ButtonPlay = TRUE;
 							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-							//raub_ButtonDebounceCounters[lub_i] = 0u;
+//							raub_ButtonDebounceCounters[lub_i] = 0u;
 						} else {
 							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-							//raub_ButtonDebounceCounters[lub_i] = 0u;
+
 						}
 					}
 			else{
@@ -133,12 +133,12 @@ static void app_Debounce_ClearDbncCounter(void)
  ***********************************************/
 static void app_Debounce_Actions(void) {
 	T_UBYTE lub_x = 0;
-
 	/* Check internal button states */
 	while (lub_x < NUMBERS_BUTTON) {
 
 		/* If button has a valid press, then perform the corresponding actions*/
 		if (rae_ButtonsState[lub_x] == BUTTON_PRESSED) {
+
 			switch (lub_x) {
 			/*Actions for BUTTON 0*/
 			case 0: {

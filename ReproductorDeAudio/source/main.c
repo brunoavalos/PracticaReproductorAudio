@@ -44,10 +44,11 @@ int main(void) {
 
 	while (1) {
 
-		app_ReadInputValue();
+
 
 		if(TRUE == rub_flagPIT0)
 		{
+			app_ReadInputValue();
 			app_Debounce_TaskMngr();
 
 

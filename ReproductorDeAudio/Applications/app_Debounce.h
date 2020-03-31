@@ -21,9 +21,9 @@
 #define NUMBERS_BUTTON 					((T_UBYTE)3)
 #define APP_BTNDBNC_DBNC_VALID_COUNT	((T_UWORD)3000U)
 #define NORMAL_BUTTON_COUNT				((T_UBYTE)400U)
-#define NUMBER_COUNTER					((T_UBYTE)2U)
-#define MAX_NUMBER_COUNTER				((T_UBYTE)5U)
-#define MIN_NUMBER_COUNTER				((T_UBYTE)3U)
+#define NUMBER_COUNTER					((T_UBYTE)4U)
+#define MAX_NUMBER_COUNTER				((T_UBYTE)200U)
+#define MIN_NUMBER_COUNTER				((T_UBYTE)5U)
 
 
 /******************************************
