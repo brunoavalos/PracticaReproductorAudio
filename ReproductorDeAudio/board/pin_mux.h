@@ -55,7 +55,7 @@ typedef enum _pin_mux_direction
 #define BOARD_INITPINS_FGPIOD 		FGPIOD /*!<@brief FGPIO device name: FGPIOE */
 #define BOARD_INITPINS_GPIOD 		GPIOD /*!<@brief GPIO device name: GPIOE */
 #define BOARD_INITPINS_PORTD 		PORTD /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_INPUT0_PIN 	0U     /*!<@brief PORTB pin index: 0 */
+#define BOARD_INITPINS_INPUT0_PIN 	1U     /*!<@brief PORTB pin index: 0 */
 #define BOARD_INITPINS_INPUT2_PIN 	2U
 #define BOARD_INITPINS_INPUT3_PIN 	3U /* @} */
 
