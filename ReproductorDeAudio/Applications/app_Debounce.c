@@ -86,34 +86,18 @@ void app_Debounce_CheckButtonsState(void)
  * Description: TBD
  ***********************************************/
 static void app_Debounce_IncreaseDbncCounter(void) {
-
-		/* Check if the counter hasn't reached its max limit */
-		if ((raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER)
-				&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
-			rub_LongPressFlag = TRUE;
+	/* Check if the counter hasn't reached its max limit */
+	if (raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER) {
 			rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
-//			raub_ButtonDebounceCounters[lub_i] = 0u;
-
-		}
-		else { //Counter has not reached a valid value
-			if (raub_ButtonDebounceCounters[lub_i] > NUMBER_COUNTER) { //Counter is in the limit
-						/* Valid State */
-						if (raub_ButtonDebounceCounters[2] == FALSE) {
-							rub_ButtonPlay = TRUE;
-							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-//							raub_ButtonDebounceCounters[lub_i] = 0u;
-						} else {
-							rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-
-						}
-					}
-			else{
-
-			}
-			raub_ButtonDebounceCounters[lub_i]++;
-		}
-
+	if ((raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER)
+			&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
+		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
+	}
+	} else { /* Nothing to do */
+	}
+	raub_ButtonDebounceCounters[lub_i]++;
 }
+
 
 /***********************************************
  * Function Name: app_Debounce_ClearDbncCounter
@@ -142,7 +126,7 @@ static void app_Debounce_Actions(void) {
 			switch (lub_x) {
 			/*Actions for BUTTON 0*/
 			case 0: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
 					lub_Output = 0u;
 					app_PreviousTrack();
 					rub_flagPIT2 = FALSE;
@@ -151,7 +135,7 @@ static void app_Debounce_Actions(void) {
 				break;
 				/*Actions for BUTTON 1*/
 			case 1: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
 					lub_Output = 0u;
 					app_NextTrack();
 					rub_flagPIT2 = FALSE;
@@ -160,8 +144,6 @@ static void app_Debounce_Actions(void) {
 			}
 				break;
 			case 2: {
-				if ((rub_flagPIT0 == TRUE)) {
-
 					if ((rub_PlayRotabit == TRUE) && (rub_Play == TRUE) && (rub_ButtonPlay == TRUE))
 					{
 						rub_Play = FALSE;
@@ -173,7 +155,6 @@ static void app_Debounce_Actions(void) {
 					rub_flagPIT0 = FALSE;
 
 				}
-			}
 				break;
 				/*Actions for not valid BUTTON*/
 			default: {
@@ -186,22 +167,15 @@ static void app_Debounce_Actions(void) {
 				switch (lub_x) {
 				/*Actions for BUTTON 0*/
 				case 0: {
-
-
-					if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == TRUE)) {
+					if (rub_flagPIT1 == TRUE) {
 						app_RotabitCounterBackward();
 						rub_flagPIT1 = FALSE;
 					}
-
-
-
-
 				}
 					break;
 					/*Actions for BUTTON 1*/
 				case 1: {
-					if ((rub_flagPIT1 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == TRUE)) {
-
+					if (rub_flagPIT1 == TRUE) {
 						app_RotabitCounterFoward();
 						rub_flagPIT1 = FALSE;
 					}
@@ -229,7 +203,7 @@ static void app_Debounce_Actions(void) {
 				break;
 				/*Actions for BUTTON 1*/
 			case BUTTON1: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE) && (rub_LongPressFlag == FALSE)) {
+				if ((rub_flagPIT2 == TRUE) && (rub_Play = TRUE)) {
 					app_RotabitCounterFoward();
 					rub_PlayRotabit = TRUE;
 					rub_flagPIT2 = FALSE;
