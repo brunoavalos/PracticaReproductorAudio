@@ -45,12 +45,20 @@ int main(void) {
 	while (1) {
 
 		app_ReadInputValue();
+
+		if(TRUE == rub_flagPIT0)
+		{
+			app_Debounce_TaskMngr();
+
+
+			rub_flagPIT0 = FALSE;
+		}
+
+
 		//app_Debounce_TaskMngr();
 		app_ADC_Task();
 		app_PWMProcentValue();
 		app_PWM_Value();
-		app_Debounce_TaskMngr();
-
 
 
 	}
