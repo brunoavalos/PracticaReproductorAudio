@@ -13,7 +13,7 @@
 
 extern T_UBYTE lub_Output;
 
-extern void app_RotabitCounterFoward(void);
-extern void app_RotabitCounterBackward(void);
+extern void app_FOWARD(void);
+extern void app_REWIND(void);
 
 #endif /* APP_ROTABITCOUNTER_H_ */

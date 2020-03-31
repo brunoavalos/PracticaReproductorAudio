@@ -8,11 +8,11 @@
 #include "app_TrackIndicator.h"
 #include "app_ReadInput.h"
 
-static T_UBYTE lub_ActualTrack = 0u;
+T_UBYTE lub_ActualTrack = 0u;
 
 extern T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
 
-	void app_NextTrack(void) {
+	void app_NEXT(void) {
 		if (lub_ActualTrack > 3) {
 			lub_ActualTrack = 0;
 			app_TrackIndicatorOutput(lub_ActualTrack);
@@ -28,7 +28,7 @@ extern T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
 
 	}
 
-	void app_PreviousTrack(void) {
+	void app_BACK(void) {
 		if (lub_ButtonState[0] == FALSE) {
 			lub_ActualTrack = lub_ActualTrack - 1;
 			app_TrackIndicatorOutput(lub_ActualTrack);

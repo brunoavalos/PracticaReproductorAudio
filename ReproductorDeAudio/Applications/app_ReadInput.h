@@ -8,6 +8,7 @@
 #ifndef APP_READINPUT_H_
 #define APP_READINPUT_H_
 
+#define NUMBERS_BUTTON 		3
 #include "../drivers/fsl_gpio.h"
 #include "../source/typedef_macros.h"
 #include "app_Debounce.h"

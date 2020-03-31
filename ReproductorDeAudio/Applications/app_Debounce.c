@@ -1,233 +1,99 @@
 /*
  * app_Debounce.c
  *
- *  Created on: Mar 26, 2020
- *      Author: dario
+ *  Created on: 31 mar. 2020
+ *      Author: Darío
  */
-
 #include "app_Debounce.h"
-#include "app_ReadInput.h"
-#include "app_PITFlag.h"
 
+/* Variables globales */
+T_UBYTE rub_Timer = 0u;
 
-/******************************************
- * Prototypes
- ******************************************/
-static void app_Debounce_CheckButtonsState(void);
-static void app_Debounce_IncreaseDbncCounter(void);
-static void app_Debounce_ClearDbncCounter(void);
-static void app_Debounce_Actions();
+/* Banderas */
 
-/******************************************
- * Variables
- ******************************************/
-T_BUTTON_STATES rae_ButtonsState[NUMBERS_BUTTON];
-T_UWORD	raub_ButtonDebounceCounters[NUMBERS_BUTTON];
-T_UBYTE lub_i;
-T_UBYTE rub_Play;
-T_UBYTE rub_ButtonPlay;
-T_UBYTE rub_PlayRotabit;
-T_UBYTE rub_LongPressFlag = FALSE;
-/******************************************
- * Code
- ******************************************/
-
-/***********************************************
- * Function Name: app_BtnDbnc_Init
- * Description: Manda mediante un arreglo de botones rae_ButtonsState
- * el estado inicial de BUTTON_UNPRESSED.
- ***********************************************/
-void app_Debounce_Init(void)
+T_UBYTE rub_ShortPress = FALSE;
+T_UBYTE rub_LongPress = FALSE;
+T_UBYTE rub_Button[NUMBERS_BUTTON];
+T_UBYTE rub_States[4];
+T_UBYTE rub_lub_o = 0u;
+T_UBYTE rub_StatesFalse[4];
+void app_DebounceValues(void)
 {
-	T_UBYTE lub_i;
-	/* Clear all the counters and states*/
-	for(lub_i = 0U; lub_i < NUMBERS_BUTTON; lub_i++)
+	lub_i = 0u;
+	app_ReadInputValue();
+	while(lub_i > NUMBERS_BUTTON)
 	{
-		raub_ButtonDebounceCounters[lub_i] = 0U; //Clear counter
-		rae_ButtonsState[lub_i] = BUTTON_UNPRESSED; //Clear press state
+		while(lub_ButtonState[lub_o] != 0)
+		{
+			lub_ButtonState[lub_i] = lub_Button[lub_i];
+			lub_o = lub_o + 1;
+		}
+		lub_i = lub_i + 1;
 	}
+
 }
 
-/***********************************************
- * Function Name: app_Debounce_TaskMngr
- * Description: TBD
- ***********************************************/
-void app_Debounce_TaskMngr(void)
+void app_DebounceCondition(void)
 {
-	/* Check the state for all buttons */
-	app_Debounce_CheckButtonsState();
-	/* Perform the corresponding action depending the buttons state */
-	app_Debounce_Actions();
-}
-
-/***********************************************
- * Function Name: app_Debounce_CheckButtonsState
- * Description: TBD
- ***********************************************/
-void app_Debounce_CheckButtonsState(void)
-{
-
-	/* Check the buttons state */
-	for(lub_i = 0; lub_i < NUMBERS_BUTTON;lub_i++)
-	{//Check for each button
-		if(lub_ButtonState[lub_i] == FALSE)
-		{//Button pressed in HW
-			app_Debounce_IncreaseDbncCounter();
+	lub_i = 0;
+	while(lub_i > NUMBER)
+	{
+		if(lub_Button[lub_i] == 0)
+		{
+			app_DebounceSelecction();
 		}
 		else
-		{//Button unpressed in SW
-			app_Debounce_ClearDbncCounter();
+		{
+			rub_States[lub_i] = NOTPRESS;
 		}
 	}
+
 }
-
-/***********************************************
- * Function Name: app_Debounce_IncreaseDbncCounter
- * Description: TBD
- ***********************************************/
-static void app_Debounce_IncreaseDbncCounter(void) {
-	/* Check if the counter hasn't reached its max limit */
-	if (raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER) {
-			rae_ButtonsState[lub_i] = BUTTON_LONGPRESSED;
-	if ((raub_ButtonDebounceCounters[lub_i] > MIN_NUMBER_COUNTER)
-			&& (raub_ButtonDebounceCounters[lub_i] < MAX_NUMBER_COUNTER)) {
-		rae_ButtonsState[lub_i] = BUTTON_PRESSED;
-	}
-	} else { /* Nothing to do */
-	}
-	raub_ButtonDebounceCounters[lub_i]++;
-}
-
-
-/***********************************************
- * Function Name: app_Debounce_ClearDbncCounter
- * Description: TBD
- ***********************************************/
-static void app_Debounce_ClearDbncCounter(void)
+void app_DebounceSelecction(void)
 {
-	/* Clear debounce counter */
-	raub_ButtonDebounceCounters[lub_i] = 0U;
-	/* Clear button state */
-	rae_ButtonsState[lub_i] = BUTTON_UNPRESSED;
+	lub_i = 0;
+		while(lub_i > NUMBER)
+		{
+				if((lub_Button[lub_i] == 0) && (lub_o > 200))
+				{
+					lub_o = 0u;
+					rub_States[lub_i] = LONGPRESS;
+				}
+				else if((lub_Button[lub_i] == 0) && (lub_o > 50) && (lub_o < 200))
+				{
+					rub_States[lub_i] = PRESS;
+				}
+
+		}
 }
 
-/***********************************************
- * Function Name: app_Debounce_Actions
- * Description: TBD
- ***********************************************/
-static void app_Debounce_Actions(void) {
-	T_UBYTE lub_x = 0;
-	/* Check internal button states */
-	while (lub_x < NUMBERS_BUTTON) {
+void app_DebounceStages(void)
+{
+	lub_i = 0;
+	while(lub_i > 3)
+	{
+		if(lub_ButtonState[lub_i] == 0)
+		{
 
-		/* If button has a valid press, then perform the corresponding actions*/
-		if (rae_ButtonsState[lub_x] == BUTTON_PRESSED) {
+			switch(rub_States[lub_i])
+			{
+			case NOTPRESS:
+			{
 
-			switch (lub_x) {
-			/*Actions for BUTTON 0*/
-			case 0: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
-					lub_Output = 0u;
-					app_PreviousTrack();
-					rub_flagPIT2 = FALSE;
-				}
-			}
-				break;
-				/*Actions for BUTTON 1*/
-			case 1: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play == TRUE)) {
-					lub_Output = 0u;
-					app_NextTrack();
-					rub_flagPIT2 = FALSE;
-				}
+			}break;
+			case PRESS:
+			{
+
+			}break;
+			case LONGPRESS:
+			{
 
 			}
-				break;
-			case 2: {
-					if ((rub_PlayRotabit == TRUE) && (rub_Play == TRUE) && (rub_ButtonPlay == TRUE))
-					{
-						rub_Play = FALSE;
+			}break;
+			default:
+			{
 
-						}else{
-								rub_Play = TRUE;
-
-							 }
-					rub_flagPIT0 = FALSE;
-
-				}
-				break;
-				/*Actions for not valid BUTTON*/
-			default: {
-				/* Do Nothing */
-			}
-				break;
-
-			}
-			if (rae_ButtonsState[lub_x] == BUTTON_LONGPRESSED) {
-				switch (lub_x) {
-				/*Actions for BUTTON 0*/
-				case 0: {
-					if (rub_flagPIT1 == TRUE) {
-						app_RotabitCounterBackward();
-						rub_flagPIT1 = FALSE;
-					}
-				}
-					break;
-					/*Actions for BUTTON 1*/
-				case 1: {
-					if (rub_flagPIT1 == TRUE) {
-						app_RotabitCounterFoward();
-						rub_flagPIT1 = FALSE;
-					}
-
-				}
-					break;
-				case 2: {
-
-				}
-					break;
-					/*Actions for not valid BUTTON*/
-				default: {
-					/* Do Nothing */
-				}
-					break;
-
-				}
-			}
-		} else { //Button is not pressed, perform the corresponding action
-			switch (lub_x) {
-			/*Actions for BUTTON 0*/
-			case BUTTON0: {
-
-			}
-				break;
-				/*Actions for BUTTON 1*/
-			case BUTTON1: {
-				if ((rub_flagPIT2 == TRUE) && (rub_Play = TRUE)) {
-					app_RotabitCounterFoward();
-					rub_PlayRotabit = TRUE;
-					rub_flagPIT2 = FALSE;
-				} else {
-					/* Do nothing */
-				}
-
-			}
-				break;
-			case BUTTON2: {
-
-			}
-				break;
-				/*Actions for not valid BUTTON*/
-			default: {
-
-			}
-				break;
 			}
 		}
-		lub_x++;
 	}
 }
-
-
-
-

@@ -11,7 +11,7 @@
 
 T_UBYTE lub_Output = 0u;
 
-void app_RotabitCounterFoward(void)
+void app_FOWARD(void)
 {
 
 	GPIOB->PDOR=lub_Output;
@@ -32,7 +32,7 @@ void app_RotabitCounterFoward(void)
 	   }
 	}
 }
-void app_RotabitCounterBackward(void)
+void app_REWIND(void)
 {
 	GPIOB->PDOR=lub_Output;
 		if(lub_Output == 0)
