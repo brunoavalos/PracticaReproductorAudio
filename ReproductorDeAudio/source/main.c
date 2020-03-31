@@ -43,7 +43,6 @@ int main(void) {
 	app_PWM_Init();
 
 	while (1) {
-		app_ReadInputValue();
 		if(TRUE == rub_flagPIT0)
 		{
 			app_DebounceTask();

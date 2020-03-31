@@ -18,7 +18,7 @@ T_UBYTE rub_Timer = 0u;
 
 T_UBYTE rub_ShortPress = FALSE;
 T_UBYTE rub_LongPress = FALSE;
-T_UBYTE rub_Button[NUMBERS_BUTTON];
+T_UBYTE rub_Button[NUMBERS_BUTTON] = {0,0,0};
 T_UBYTE rub_States[4];
 T_UBYTE rub_lub_o = 0u;
 T_UBYTE lub_i = 0u;
@@ -38,14 +38,22 @@ void app_DebounceValues(void)
 {
 	lub_i = 0u;
 	app_ReadInputValue();
-	while(lub_i > NUMBERS_BUTTON)
+	while(lub_i < NUMBERS_BUTTON)
 	{
-		while(lub_ButtonState[lub_o] != 0)
+		while((lub_ButtonState[lub_i] != 1) && (lub_o > 1))
 		{
-			lub_ButtonState[lub_i] = rub_Button[lub_i];
+			lub_ButtonState[lub_i] = GPIO_ReadPinInput(GPIOD, lub_i);
 			lub_o = lub_o + 1;
 		}
-		lub_i = lub_i + 1;
+		if(lub_o > 0)
+		{
+			lub_ButtonState[lub_i] = 0u;
+		}
+		else
+		{
+			rub_Button[lub_i] = lub_ButtonState[lub_i];
+			lub_i = lub_i + 1;
+		}
 	}
 
 }
@@ -80,6 +88,7 @@ void app_DebounceSelecction(void)
 				}
 				else if((rub_Button[lub_i] == 0) && (lub_o > 50) && (lub_o < 200))
 				{
+					lub_o = 0u;
 					rub_States[lub_i] = PRESS;
 					app_DebounceStages();
 				}
