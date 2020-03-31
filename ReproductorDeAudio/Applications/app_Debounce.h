@@ -11,7 +11,7 @@
 #include "app_ReadInput.h"
 extern unsigned char lub_ButtonState[NUMBERS_BUTTON];
 
-extern void app_DebounceSelecction(void);
+extern void app_DebounceTask(void);
 enum{
 	NOTPRESS,
 	PRESS,

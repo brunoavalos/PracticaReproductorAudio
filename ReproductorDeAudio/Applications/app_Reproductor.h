@@ -20,10 +20,5 @@ typedef enum
 	LONG_PRESSED
 }T_STATES;
 
-typedef enum{
-	STOP,
-	PLAY,
-	PAUSE
-}T_STATIC_STATES;
 
 #endif /* APP_REPRODUCTOR_H_ */

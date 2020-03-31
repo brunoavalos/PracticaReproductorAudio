@@ -6,6 +6,11 @@
  */
 #include "app_Debounce.h"
 
+void app_DebounceValues(void);
+void app_DebounceCondition(void);
+void app_DebounceSelecction(void);
+void app_DebounceStages(void);
+
 /* Variables globales */
 T_UBYTE rub_Timer = 0u;
 
@@ -19,6 +24,14 @@ T_UBYTE rub_lub_o = 0u;
 T_UBYTE lub_i = 0u;
 T_UBYTE lub_o = 0u;
 T_UBYTE rub_StatesFalse[4];
+
+void app_DebounceTask(void)
+{
+	app_DebounceValues();
+	app_DebounceCondition();
+	app_DebounceSelecction();
+}
+
 void app_DebounceValues(void)
 {
 	lub_i = 0u;
@@ -51,6 +64,7 @@ void app_DebounceCondition(void)
 	}
 
 }
+
 void app_DebounceSelecction(void)
 {
 	lub_i = 0;
@@ -60,10 +74,12 @@ void app_DebounceSelecction(void)
 				{
 					lub_o = 0u;
 					rub_States[lub_i] = LONGPRESS;
+					app_DebounceStages();
 				}
 				else if((rub_Button[lub_i] == 0) && (lub_o > 50) && (lub_o < 200))
 				{
 					rub_States[lub_i] = PRESS;
+					app_DebounceStages();
 				}
 
 		}
@@ -95,3 +111,5 @@ void app_DebounceStages(void)
 		}
 	}
 }
+
+

@@ -46,6 +46,7 @@ int main(void) {
 		app_ReadInputValue();
 		if(TRUE == rub_flagPIT0)
 		{
+			app_DebounceTask();
 			rub_flagPIT0 = FALSE;
 		}
 		//app_Debounce_TaskMngr();
