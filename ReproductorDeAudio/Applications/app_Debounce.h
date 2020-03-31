@@ -9,6 +9,9 @@
 #define APP_DEBOUNCE_H_
 
 #include "app_ReadInput.h"
+#include "app_RotabitCounter.h"
+#include "app_TrackIndicator.h"
+
 extern unsigned char lub_ButtonState[NUMBERS_BUTTON];
 
 extern void app_DebounceTask(void);
