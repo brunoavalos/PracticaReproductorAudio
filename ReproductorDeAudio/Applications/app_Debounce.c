@@ -19,6 +19,7 @@ T_UBYTE rub_Timer = 0u;
 T_UBYTE rub_ShortPress = FALSE;
 T_UBYTE rub_LongPress = FALSE;
 T_UBYTE rub_Button[NUMBERS_BUTTON];
+T_UBYTE rub_ButtonsStates[NUMBERS_BUTTON];
 T_UBYTE rub_States[4];
 T_UBYTE rub_lub_o = 0u;
 T_UBYTE lub_i = 0u;
@@ -83,6 +84,7 @@ void app_DebounceSelecction(void)
 					rub_States[lub_i] = NOTPRESS;
 				}
 				lub_i = lub_i + 1;
+				rub_ButtonsStates[lub_i] = lub_i;
 		}
 }
 
@@ -91,74 +93,66 @@ void app_DebounceStages(void)
 	lub_i = 0;
 	while(lub_i < 3)
 	{
-		if(lub_ButtonState[lub_i] == 0)
-		{
-
-			switch(rub_States[lub_i])
+			if(rub_States[lub_i] == NOTPRESS)
 			{
-			case NOTPRESS:
-			{
-//				if(rub_StopRotabit == FALSE)
-//				{
-					if(rub_flagPIT2 == TRUE)
-					{
-						app_FOWARD();
-						rub_flagPIT2 = FALSE;
-					}
-//				}
-
-			}break;
-			case PRESS:
-			{
-				/* Previous Buttom PTD0*/
-				if(lub_ButtonState[0] == 0)
-				{
-						app_BACK();
-				}
-				/* Next Button PTD2*/
-				if(lub_ButtonState[1] == 0)
-				{
-						app_NEXT();
-				}
-				/* Play Buttom PTD3*/
-				if(lub_ButtonState[2] == 0)
-				{
-					rub_PausePlay = FALSE;
-					rub_StopRotabit = FALSE;
-				}
-			}break;
-			case LONGPRESS:
-			{
-				/* Previous Buttom PTD0*/
-				if(lub_ButtonState[0] == 0)
-				{
-					if(rub_flagPIT1 == TRUE)
-					{
-						app_REWIND();
-						rub_flagPIT1 = FALSE;
-					}
-				}
-				/* Next Button PTD2*/
-				if(lub_ButtonState[1] == 0)
-				{
-					if(rub_flagPIT1 == TRUE)
-					{
-						app_FOWARD();
-						rub_flagPIT1 = FALSE;
-					}
-				}
-				if(lub_ButtonState[2] == 0)
-				{
-					lub_Output = 0u;
-					lub_ActualTrack = 0u;
-					rub_StopRotabit = TRUE;
+				if (rub_flagPIT2 == TRUE) {
+					app_FOWARD();
+					rub_flagPIT2 = FALSE;
 				}
 
 			}
-			}break;
+			if(rub_States[lub_i] == PRESS)
+			{
+				switch (rub_ButtonsStates[lub_i]) {
+					case 0: {
+						app_BACK();
+					}
+						break;
+					case 1: {
+						app_NEXT();
+					}
+						break;
+					case 2: {
+					rub_PausePlay = FALSE;
+					rub_StopRotabit = FALSE;
+					}
+				}
+			}
+			if(rub_States[lub_i] == LONGPRESS)
+			{
+				switch (rub_ButtonsStates[lub_i])
+				{
+					case 0: {
+					if (rub_flagPIT1 == TRUE) {
+						app_REWIND();
+						rub_flagPIT1 = FALSE;
+					}
+					}
+						break;
+					case 1: {
+					if (rub_flagPIT1 == TRUE) {
+						app_FOWARD();
+						rub_flagPIT1 = FALSE;
+					}
+
+					}
+						break;
+					case 2: {
+						lub_Output = 0u;
+						lub_ActualTrack = 0u;
+						rub_StopRotabit = TRUE;
+
+					}
+						break;
+				}
+			}
+			else
+			{
+				/* Do nothing */
+			}
+			lub_i = lub_i + 1;
 		}
-		lub_i = lub_i + 1;
-	}
+
 }
 
 
