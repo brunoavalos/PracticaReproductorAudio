@@ -18,7 +18,7 @@ T_UBYTE rub_Timer = 0u;
 
 T_UBYTE rub_ShortPress = FALSE;
 T_UBYTE rub_LongPress = FALSE;
-T_UBYTE rub_Button[NUMBERS_BUTTON];
+T_UBYTE rub_Button[NUMBERS_BUTTON] = {1,1,1};
 T_UBYTE rub_ButtonsStates[NUMBERS_BUTTON];
 T_UBYTE rub_States[4];
 T_UBYTE rub_lub_o = 0u;
@@ -42,12 +42,12 @@ void app_DebounceValues(void)
 	while(lub_i < NUMBERS_BUTTON)
 	{
 
-		if(lub_o[lub_i] > 1)
+		if((lub_o[lub_i] > 50) && ((lub_ButtonState[lub_i] == 1)))
 		{
-			lub_ButtonState[lub_i] = 0u;
+			rub_Button[lub_i] = 0u;
 			lub_i = lub_i + 1;
 		}
-		if(lub_o[lub_i] == 1)
+		if(lub_ButtonState[lub_i] == 1)
 		{
 			rub_Button[lub_i] = lub_ButtonState[lub_i];
 			lub_i = lub_i + 1;
@@ -70,17 +70,17 @@ void app_DebounceSelecction(void)
 		{
 				if((rub_Button[lub_i] == 0) && (lub_o[lub_i] >= 200))
 				{
-					lub_o[lub_i] = 0u;
+//					lub_o[lub_i] = 0u;
 					rub_States[lub_i] = LONGPRESS;
 				}
-				else if((rub_Button[lub_i] == 0) && (lub_o[lub_i] > 50) && (lub_o[lub_i] < 200))
+				if((rub_Button[lub_i] == 0) && (lub_o[lub_i] > 50) && (lub_o[lub_i] < 200))
 				{
-					lub_o[lub_i] = 0u;
+//					lub_o[lub_i] = 0u;
 					rub_States[lub_i] = PRESS;
 				}
 				else if(rub_Button[lub_i] == 1)
 				{
-					lub_o[lub_i] = 0u;
+//					lub_o[lub_i] = 0u;
 					rub_States[lub_i] = NOTPRESS;
 				}
 				lub_i = lub_i + 1;
@@ -105,10 +105,13 @@ void app_DebounceStages(void)
 			{
 				switch (rub_ButtonsStates[lub_i]) {
 					case 0: {
+						lub_o[lub_i] = 0;
 						app_BACK();
 					}
 						break;
 					case 1: {
+						lub_o[lub_i] = 0;
+
 						app_NEXT();
 					}
 						break;
@@ -116,6 +119,7 @@ void app_DebounceStages(void)
 					rub_PausePlay = FALSE;
 					rub_StopRotabit = FALSE;
 					}
+					break;
 				}
 			}
 			if(rub_States[lub_i] == LONGPRESS)
