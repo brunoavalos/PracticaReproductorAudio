@@ -18,8 +18,6 @@ extern T_UBYTE lub_ButtonState[NUMBERS_BUTTON];
 			app_TrackIndicatorOutput(lub_ActualTrack);
 		}
 		if (lub_ButtonState[1] == FALSE) { //NEXT
-
-			lub_ActualTrack++;
 			app_TrackIndicatorOutput(lub_ActualTrack);
 		}
 		else {
