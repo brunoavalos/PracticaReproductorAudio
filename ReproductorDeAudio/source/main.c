@@ -46,7 +46,7 @@ int main(void) {
 		app_ADC_Task();
 		app_PWMProcentValue();
 		app_PWM_Value();
-		if(TRUE == rub_flagPIT0)
+		if(rub_flagPIT0 == TRUE)
 		{
 			app_DebounceTask();
 			rub_flagPIT0 = FALSE;
