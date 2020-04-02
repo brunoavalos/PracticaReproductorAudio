@@ -64,14 +64,14 @@ void app_DebounceValues(void)
 			for(lub_o[lub_i]=0u;(lub_ButtonState[lub_i] == 0) && (lub_UpDown == FALSE); lub_o[lub_i]++)
 			{
 
-			if((rub_flagPIT1 == TRUE) && (lub_i == 1) && (lub_o[1] > 200))
+			if((rub_flagPIT1 == TRUE) && (lub_i == 1) && (lub_o[1] > 200) && (rub_PausePlay == TRUE))
 			{
 
 				app_FOWARD();
 				lub_o[lub_i] = lub_o[lub_i] + 1;
 				rub_flagPIT1 = FALSE;
 			}
-			if((rub_flagPIT1 == TRUE) && (lub_i == 0) && (lub_o[0] > 200))
+			if((rub_flagPIT1 == TRUE) && (lub_i == 0) && (lub_o[0] > 200) && (rub_PausePlay == TRUE))
 			{
 
 				app_REWIND();
@@ -121,7 +121,7 @@ void app_DebounceStages(void)
 	{
 			if(rub_States[lub_i] == NOTPRESS)
 			{
-
+				/* Not Used */
 			}
 			if(rub_States[lub_i] == PRESS)
 			{
@@ -164,11 +164,14 @@ void app_DebounceStages(void)
 					break;
 				}
 			}
-			if(rub_States[lub_i] == LONGPRESS)
+		if (rub_States[lub_i] == LONGPRESS) {
+			if(rub_Button[2] == 0)
 			{
-				GPIOB->PDOR=0u;
+				GPIOB->PDOR = 0u;
 				app_TrackIndicatorOutput(0u);
 				lub_o[lub_i] = 0u;
+				rub_PausePlay = FALSE;
+			}
 
 			}
 			else
