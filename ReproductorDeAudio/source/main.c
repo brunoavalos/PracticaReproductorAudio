@@ -48,6 +48,7 @@ int main(void) {
 		app_PWM_Value();
 		if(rub_flagPIT0 == TRUE)
 		{
+			app_InterruptFlag();
 			app_DebounceTask();
 			rub_flagPIT0 = FALSE;
 		}

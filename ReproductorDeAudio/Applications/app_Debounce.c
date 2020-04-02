@@ -28,6 +28,7 @@ T_UBYTE rub_StatesFalse[4];
 T_UBYTE rub_PausePlay;
 T_UBYTE rub_StopRotabit = FALSE;
 T_UBYTE rub_LongPressFlag = FALSE;
+T_UBYTE rub_NormalPress = FALSE;
 
 void app_DebounceTask(void)
 {
@@ -39,7 +40,8 @@ void app_DebounceTask(void)
 void app_DebounceValues(void)
 {
 	lub_i = 0u;
-	T_UBYTE lub_UpDown = FALSE;
+	T_UBYTE lub_UpDown;
+//	T_UBYTE lub_UpDown = FALSE;
 	app_ReadInputValue();
 	while(lub_i < NUMBERS_BUTTON)
 	{
@@ -49,7 +51,7 @@ void app_DebounceValues(void)
 			rub_Button[lub_i] = 0u;
 			lub_i = lub_i + 1;
 			lub_UpDown = TRUE;
-			rub_LongPressFlag = FALSE;
+			rub_LongPressFlag = TRUE;
 		}
 		if((lub_o[lub_i] > 200) && ((lub_ButtonState[lub_i] == 1)))
 		{
@@ -58,23 +60,34 @@ void app_DebounceValues(void)
 					rub_LongPressFlag = TRUE;
 		}
 		if(lub_ButtonState[lub_i] == 1)
-		{
-			rub_Button[lub_i] = lub_ButtonState[lub_i];
-			lub_i = lub_i + 1;
-		}
+				{
+					rub_Button[lub_i] = lub_ButtonState[lub_i];
+					lub_i = lub_i + 1;
+				}
+
 		else
 		{
 			for(lub_o[lub_i]=0u;(lub_ButtonState[lub_i] == 0) && (lub_UpDown == FALSE); lub_o[lub_i]++)
 			{
-				rub_LongPressFlag = TRUE;
-				if((rub_flagPIT2 == TRUE) && (lub_i == 1) && (lub_o[1] > 200) && (rub_LongPressFlag == TRUE))
-				{
-								rub_LongPressFlag = TRUE;
-								app_FOWARD();
-								rub_flagPIT2 = FALSE;
-								lub_o[lub_i] = lub_o[lub_i] + 1;
 
-				}
+			if((rub_flagPIT1 == TRUE) && (lub_i == 1) && (lub_o[1] > 250))
+			{
+
+				app_FOWARD();
+				lub_o[lub_i] = lub_o[lub_i] + 1;
+				rub_flagPIT1 = FALSE;
+
+
+			}
+			if((rub_flagPIT1 == TRUE) && (lub_i == 0) && (lub_o[0] > 250))
+			{
+
+				app_REWIND();
+				lub_o[lub_i] = lub_o[lub_i] + 1;
+				rub_flagPIT1 = FALSE;
+
+
+			}
 				else
 				{
 				lub_o[lub_i] = lub_o[lub_i] + 1;
@@ -123,24 +136,27 @@ void app_DebounceStages(void)
 			}
 			if(rub_States[lub_i] == PRESS)
 			{
+				rub_LongPressFlag = FALSE;
 				switch (rub_ButtonsStates[lub_i]) {
 					case 0: {
-						if((rub_PausePlay == TRUE) && (rub_LongPressFlag = FALSE))
+						if(rub_PausePlay == TRUE)
 						{
 						lub_ActualTrack--;
 						app_TrackIndicatorOutput(lub_ActualTrack);
 						lub_o[lub_i] = 0u;
 						rub_LongPressFlag = FALSE;
+						rub_NormalPress = TRUE;
 						}
 					}
 						break;
 					case 1: {
-						if((rub_PausePlay == TRUE) && (rub_LongPressFlag = FALSE))
+						if(rub_PausePlay == TRUE)
 						{
 						lub_ActualTrack++;
 						app_TrackIndicatorOutput(lub_ActualTrack);
 						lub_o[lub_i] = 0u;
 						rub_LongPressFlag = FALSE;
+						rub_NormalPress = TRUE;
 						}
 					}
 						break;
@@ -190,14 +206,14 @@ void app_DebounceStages(void)
 			}
 			else
 			{
-//			if (rub_flagPIT0 == TRUE) {
-//				if(rub_PausePlay == TRUE)
-//				{
-//					app_FOWARD();
-//					rub_StopRotabit = TRUE;
-//				}
-//				rub_flagPIT0 = FALSE;
-//			}
+			if (rub_flagPIT2 == TRUE) {
+				if(rub_PausePlay == TRUE)
+				{
+					app_FOWARD();
+					rub_StopRotabit = TRUE;
+				}
+				rub_flagPIT2 = FALSE;
+			}
 			}
 			lub_i = lub_i + 1;
 		}

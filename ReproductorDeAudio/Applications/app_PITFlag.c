@@ -14,17 +14,15 @@
 volatile T_UBYTE rub_flagPIT0 = 0u;
 volatile T_UBYTE rub_flagPIT1 = 0u;
 volatile T_UBYTE rub_flagPIT2 = 0u;
-volatile T_UBYTE rub_InterruptFlag = 0u;
+//volatile T_UBYTE rub_InterruptFlag = 0u;
 T_UBYTE rub_100msCounter=0u;
 
 void PIT_DriverIRQHandler(void) {
 	rub_flagPIT0 = PIT_GetStatusFlags(PIT, kPIT_Chnl_0);
 	rub_flagPIT1 = PIT_GetStatusFlags(PIT, kPIT_Chnl_1);
 
-	if (rub_flagPIT1) {
+			if (rub_flagPIT1) {
 				PIT_ClearStatusFlags(PIT, 1, kPIT_TimerFlag);
-				app_InterruptFlag();
-				rub_InterruptFlag = TRUE;
 			}
 			if (rub_flagPIT0) {
 
@@ -39,16 +37,14 @@ void PIT_DriverIRQHandler(void) {
 
 void app_InterruptFlag(void) {
 
-	if (rub_InterruptFlag == TRUE) {
-		if (rub_100msCounter >= 5) {
+		if (rub_100msCounter >= 50) {
 			rub_flagPIT2 = TRUE;
 			rub_100msCounter = 0u;
-			rub_InterruptFlag = FALSE;
 		} else {
 			rub_100msCounter = rub_100msCounter + 1;
+			rub_flagPIT2 = FALSE;
 
 		}
-	}
 }
 
 
