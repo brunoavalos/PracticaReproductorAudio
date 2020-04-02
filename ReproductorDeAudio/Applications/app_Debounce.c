@@ -169,7 +169,9 @@ void app_DebounceStages(void)
 			{
 				GPIOB->PDOR = 0u;
 				app_TrackIndicatorOutput(0u);
-				lub_o[lub_i] = 0u;
+				lub_o[1] = 0u;
+				lub_o[0] = 0u;
+				lub_o[2] = 0u;
 				rub_PausePlay = FALSE;
 			}
 
